@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 3279247108
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: login.unity3d
+      Dependencies:
+        Dependency_0: uielements.unity3d
+    Info_1:
+      Name: uicommonelement.unity3d
+      Dependencies: {}
+    Info_2:
+      Name: uielements.unity3d
+      Dependencies: {}
+    Info_3:
+      Name: uiitem.unity3d
+      Dependencies: {}
+    Info_4:
+      Name: homepage.unity3d
+      Dependencies:
+        Dependency_0: uicommonelement.unity3d
+        Dependency_1: uielements.unity3d
+        Dependency_2: uiitem.unity3d

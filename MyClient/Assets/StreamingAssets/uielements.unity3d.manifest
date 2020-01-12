@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 3920303517
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6af6d3816d8f14415c8b89d6cb7c1ea7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cb3f6df5cbc4a2990c44c2787bc9553a
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Art/UI/SharedImage/UIElements/Spring.png
+- Assets/Art/UI/SharedImage/UIElements/goat.png
+- Assets/Art/UI/SharedImage/UIElements/Winter.png
+- Assets/Art/UI/SharedImage/UIElements/MainPage.png
+- Assets/Art/UI/SharedImage/UIElements/Automn.png
+- Assets/Art/UI/SharedImage/UIElements/Summer.png
+Dependencies: []

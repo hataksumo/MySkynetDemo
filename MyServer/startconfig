@@ -1,0 +1,18 @@
+root = "../MyServer/"
+skynet_root = "./"
+thread = 8
+start = "main"  -- main script
+bootstrap = "snlua bootstrap"   -- 启动的第一个服务以及其启动参数 service/bootstrap.lua
+luaservice = root.."LibService/?.lua;"..root.."?.lua"
+lualoader = skynet_root .. "lualib/loader.lua"
+lua_path = skynet_root.."lualib/?.lua;"..skynet_root.."lualib/?/init.lua;"..root.."?.lua"
+lua_cpath = skynet_root .. "luaclib/?.so"
+preload = root.."preload.lua"   -- run preload.lua before every lua service run
+snax = root.."?.lua"
+cpath = skynet_root.."cservice/?.so"
+-- daemon = "./skynet.pid"
+
+harbor = 1
+address = "192.168.1.4:2526"
+master = "192.168.1.4:2013"
+standalone = "0.0.0.0:2013"

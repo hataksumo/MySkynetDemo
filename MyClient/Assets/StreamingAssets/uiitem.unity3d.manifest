@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 2430933228
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 401100c9c001559f1ae8d4c38f7ae5d4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cb3f6df5cbc4a2990c44c2787bc9553a
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Art/UI/SharedImage/UIItem/chip_4.png
+- Assets/Art/UI/SharedImage/UIItem/chip_11.png
+- Assets/Art/UI/SharedImage/UIItem/chip_2.png
+- Assets/Art/UI/SharedImage/UIItem/coin.png
+- Assets/Art/UI/SharedImage/UIItem/chip_3.png
+- Assets/Art/UI/SharedImage/UIItem/chip_7.png
+- Assets/Art/UI/SharedImage/UIItem/chip_1.png
+- Assets/Art/UI/SharedImage/UIItem/chip_5.png
+- Assets/Art/UI/SharedImage/UIItem/chip_8.png
+- Assets/Art/UI/SharedImage/UIItem/chip_12.png
+- Assets/Art/UI/SharedImage/UIItem/Wood.png
+- Assets/Art/UI/SharedImage/UIItem/chip_9.png
+- Assets/Art/UI/SharedImage/UIItem/chip_10.png
+- Assets/Art/UI/SharedImage/UIItem/food.png
+- Assets/Art/UI/SharedImage/UIItem/chip_13.png
+- Assets/Art/UI/SharedImage/UIItem/chip_6.png
+- Assets/Art/UI/SharedImage/UIItem/Stone.png
+Dependencies: []

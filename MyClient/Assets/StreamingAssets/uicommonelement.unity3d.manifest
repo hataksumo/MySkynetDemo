@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 2726567458
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2f4668d5f5d36cea6df48563f59d7214
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cb3f6df5cbc4a2990c44c2787bc9553a
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Art/UI/SharedImage/UICommonElement/Close1.png
+- Assets/Art/UI/SharedImage/UICommonElement/Down.png
+- Assets/Art/UI/SharedImage/UICommonElement/Close2.png
+- Assets/Art/UI/SharedImage/UICommonElement/Setting.png
+- Assets/Art/UI/SharedImage/UICommonElement/Back.png
+Dependencies: []
