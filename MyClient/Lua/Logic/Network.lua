@@ -43,6 +43,15 @@ function Network.OnConnect()
     --Network.HelloToSrv("hello server")
 end
 
+--当发送消息时，发现链接已断开--
+function Network.OnDisconnected()
+    networkMgr:SendConnect() 
+    logWarn("Game Server connected!!");
+    --Network.HelloToSrv("hello server")
+end
+
+
+
 --异常断线--
 function Network.OnException() 
     islogging = false; 
@@ -119,7 +128,7 @@ function Network.SendMsg(v_iMsgId,v_tMsg)
     -- end
 
     local sProtoStrBuf = ProtoSchema:encode(theMsgCfg.ProtoName,v_tMsg)
-    print(string.printByte(sProtoStrBuf))
+    --print(string.printByte(sProtoStrBuf))
 
     --local tbp = ProtoSchema:decode(theMsgCfg.ProtoName,sProtoStrBuf)
     --print("tbp = {\n"..print_table(tbp).."\n}")

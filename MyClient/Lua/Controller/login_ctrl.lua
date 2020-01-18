@@ -97,6 +97,11 @@ function LoginCtrl:OnNetRegist(v_tRsp)
 	elseif v_tRsp.code == 4 then
 		ViewMgr.SendMsg("Regist","Reset")
 		ViewMgr.SendMsg("Regist","Warning",self,10008)
+	elseif v_tRsp.code == 5 then
+		ViewMgr.SendMsg("Regist","Reset")
+		ViewMgr.SendMsg("Regist","Warning",self,10009)
+	elseif v_tRsp.code == 6 then
+		ViewMgr.SendMsg("Regist","Warning",self,10010)
 	end
 end
 

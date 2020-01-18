@@ -52,18 +52,22 @@ end
 
 function REQUEST.Login(v_tMsg)
 	--print("usrName = "..v_tMsg.usrName.." passwd = "..v_tMsg.passwd)
-	if v_tMsg.usrName == "hataksumo" and v_tMsg.passwd == "qqhilvmgal7" then
-		sendMsg(20011,{code = 1})
+	local rst,account = skynet.call(".login","lua","Login",v_tMsg.usrName,v_tMsg.passwd)
+	if rst then
+		sendMsg(20011,{code = 1,uid = account.uid})
 	else
-		sendMsg(20011,{code = 2})
+		sendMsg(20011,{code = 2,uid = -1})
 	end
 
 end
 
 function REQUEST.UsrNameValid(v_tMsg)
-	if v_tMsg.usrName == "hataksumo" then
+	local rst = skynet.call(".login","lua","HasUser",v_tMsg.usrName)
+	if rst then
+		print("has usr")
 		sendMsg(20010,{code = 1,usrName = v_tMsg.usrName})
 	else
+		print("don't have usr")
 		sendMsg(20010,{code = 2,usrName = "guest"})
 	end
 end
@@ -88,11 +92,7 @@ function REQUEST.Regist(v_tMsg)
 		return
 	end
 
-	if v_tMsg.usrName == "hataksumo" then
-		sendMsg(20020,{code = 3,usrName = v_tMsg.usrName})
-		return
-	end
-
-	sendMsg(20020,{code = 1,usrName = v_tMsg.usrName})
+	local rst = skynet.call(".login","lua","Regist",v_tMsg.usrName,v_tMsg.passwd)
+	sendMsg(20020,{code = rst.code,usrName = v_tMsg.usrName})
 	print(v_tMsg.usrName.." regist succesed")
 end

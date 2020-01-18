@@ -1,4 +1,4 @@
-local skynet = require "skynet"
+skynet = require "skynet"
 local socket = require "skynet.socket"
 local sproto = require "sproto"
 local sprotoloader = require "sprotoloader"
@@ -13,6 +13,7 @@ REQUEST = {}
 require "Logic/Login/login"
 ProtoSchema = nil
 local MsgHandler = require "MsgHandler"
+account = nil
 
 
 local client_fd

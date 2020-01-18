@@ -103,6 +103,7 @@ public class SocketClient {
                 byte[] payload = ms.ToArray();
                 outStream.BeginWrite(payload, 0, payload.Length, new AsyncCallback(OnWrite), null);
             } else {
+                Util.CallMethod("Network", "OnDisconnected");
                 Debug.LogError("client.connected----->>false");
             }
         }
