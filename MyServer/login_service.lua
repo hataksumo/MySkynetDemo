@@ -1,4 +1,4 @@
-local skynet = require "skynet"
+ local skynet = require "skynet"
 require "skynet.manager"
 
 local accounts = {}
@@ -19,6 +19,10 @@ end
 
 function CMD.Login(v_sUsr,v_sPswd)
 	local account = accounts[v_sUsr]
+
+	print(string.format("login request v_sUsr = %s, v_sPswd = %s",v_sUsr,v_sPswd))
+
+
 	if account and account.passwd then
 		if v_sPswd == account.passwd then
 			return true,account
@@ -48,10 +52,6 @@ function CMD.Regist(v_sUsr,v_sPswd)
 			return {code = 3}
 		end
 	end
-	accounts[v_sUsr] = {}
-	accounts[v_sUsr].usr_name = v_sUsr
-	accounts[v_sUsr].passwd = v_sPswd
-
 	local ok,rtn = skynet.call(".sql","lua","Querycb","Regist",{v_sUsr,v_sPswd,"now()"})
 	if ok then
 		return {code = 1}
@@ -59,6 +59,7 @@ function CMD.Regist(v_sUsr,v_sPswd)
 		return {code = 6,err = rtn}
 	end
 end
+
 
 
 skynet.start( function()

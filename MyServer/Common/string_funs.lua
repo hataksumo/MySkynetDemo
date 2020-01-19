@@ -11,12 +11,23 @@ end
 function _print_table(v_t)
 	local str = ""
 	for key,val in pairs(v_t) do
+		local luaKey = nil
+		if type(key) == "string" then
+			local firstLetterByte = string.byte(key,1)
+			if firstLetterByte >= string.byte('A') and firstLetterByte <= string.byte('Z')
+				or firstLetterByte >= string.byte('a') and firstLetterByte <= string.byte('z')
+				or firstLetterByte == '_' then
+				luaKey = key
+			else
+				luaKey = "[\""..key.."\"]"
+			end
+		elseif type(key) == "number" then
+			luaKey = '['..key..']'
+		end
 		if type(val) == "table" then
-			str = str..key.." = {\r\n".._print_table(val).."\r\n},"
-		elseif type(val) == "string" then
-			str = str..key.." = "..(val and tostring(val) or "nil")..", "
-		elseif type(val) == "number" then
-			str = str..'['..key..']'.." = "..(val and tostring(val) or "nil")..", "
+			str = str..luaKey.." = {\r\n".._print_table(val).."\r\n},"
+		else
+			str = str..luaKey.." = "..val
 		end
 	end
 	return str

@@ -3,6 +3,7 @@ local LoginCtrl = class(CtrlBase)
 function LoginCtrl:Ctor(v_cfg)
 	self.sIniView = "Login"
 	self.sUsrName = nil
+	self.sPasswd = nil
 	self.CMDS["EnsureUsrName"] = self.OnCmdEnsureUsrName
 	self.CMDS["EnsurePswd"] = self.OnCmdEnsurePswd
 	self.CMDS["Reset"] = self.OnCmdReset
@@ -50,6 +51,7 @@ function LoginCtrl:EnsurePswd(v_sPswd)
 end
 
 function LoginCtrl:OnNetEnsurePswd(v_tRsp)
+	print("OnNetEnsurePswd")
 	if v_tRsp.code == 1 then
 		local homePageCtrl = CtrlMgr.GetOrCreateCtrl("HomePage")
 		homePageCtrl:ShowUnique(true)
@@ -87,7 +89,9 @@ end
 function LoginCtrl:OnNetRegist(v_tRsp)
 	if v_tRsp.code == 1 then
 		self.sUsrName = v_tRsp.usrName
-		ViewMgr.ShowUnique("HomePage")
+		self.sPasswd = v_tRsp.passwd
+		Network.SendMsg(10010,{usrName = self.sUsrName,passwd = self.sPasswd})
+		--ViewMgr.ShowUnique("HomePage")
 	elseif v_tRsp.code == 2 then
 		ViewMgr.SendMsg("Regist","Reset",self)
 		ViewMgr.SendMsg("Regist","Warning",self,10007)
