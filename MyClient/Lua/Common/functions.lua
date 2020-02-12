@@ -134,3 +134,18 @@ function string.printByte(v_str)
 	end
 	return str
 end
+
+function IsObject(v_tester)
+	if v_tester.__tbl_Baseclass__ then
+		return true
+	end
+	return false
+end
+
+function table.getCnt(v_t)
+	local cnt = 0
+	for key,val in pairs(v_t) do
+		cnt = cnt + 1
+	end
+	return cnt
+end

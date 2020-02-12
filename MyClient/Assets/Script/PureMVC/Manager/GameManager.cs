@@ -221,7 +221,7 @@ namespace LuaFramework {
         public void OnResourceInited() {
 #if ASYNC_MODE
             ResManager.Initialize(AppConst.AssetDir, delegate() {
-                Debug.Log("Initialize OK!!!");
+                //Debug.Log("Initialize OK!!!");
                 this.OnInitialize();
             });
 #else

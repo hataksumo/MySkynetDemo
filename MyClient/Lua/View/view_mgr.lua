@@ -15,7 +15,7 @@ function ViewMgr.GetOrCreateView(v_sLogicName,v_fnCallBack)
 	local viewCodePath = "View/"..cfg.View
 	local viewClass,errMsg = require(viewCodePath)
 	if type(viewClass) == "boolean" then
-		logError(v_sLogicName.." GetOrCreateView error :\r\n"..(errMsg or "no return"))
+		logError(v_sLogicName.." view "..viewCodePath.." GetOrCreateView error :\r\n"..(errMsg or "no return"))
 	end
 	local viewObj = viewClass:new(cfg)
 	ViewMgr.CreatePanel(v_sLogicName,function(v_obj)
@@ -28,16 +28,20 @@ function ViewMgr.GetOrCreateView(v_sLogicName,v_fnCallBack)
 	return Views[v_sLogicName]
 end
 
-
-
-function ViewMgr.CreatePanel(v_sLogicName,v_fnCallBack)
+local function _GetCfg(v_sLogicName)
 	v_sLogicName = v_sLogicName or "null"
 	local cfg = abAssetCfg[v_sLogicName]
 	if not cfg then
-		logError("can't find "..v_sLogicName.."in AbAssetCfg")
-		return 
+		logError("can't find "..v_sLogicName.." in AbAssetCfg")
+		return nil
 	end
-	panelMgr:CreateThePanel(v_sLogicName,cfg.Ab,cfg.AssetName,cfg.Name,v_fnCallBack)
+	return cfg
+end
+
+
+function ViewMgr.CreatePanel(v_sLogicName,v_fnCallBack)
+	local tCfg = _GetCfg(v_sLogicName)
+	panelMgr:CreateThePanel(tCfg.Layer,v_sLogicName,tCfg.Ab,tCfg.AssetName,tCfg.Name,v_fnCallBack)
 end
 
 -- function ViewMgr.SwitchToNewPanel(v_sLogicName,v_fnCallBack)
@@ -65,9 +69,10 @@ function ViewMgr.DestroyView(v_sLogicName)
 end
 
 function ViewMgr.HideView(v_sLogicName)
+	local tCfg = _GetCfg(v_sLogicName)
 	local the_view = Views[v_sLogicName]
 	if the_view then
-		panelMgr:Hide(the_view.sName)
+		panelMgr:Hide(tCfg.Layer,the_view.sName)
 	end
 end
 
@@ -76,17 +81,11 @@ function ViewMgr.Show(v_sLogicName,v_bInit)
 	if v_bInit == nil then
 		v_bInit = true
 	end
-	local the_view = Views[v_sLogicName]
-	if not the_view then
-		the_view = ViewMgr.GetOrCreateView(v_sLogicName,function()
-			panelMgr:Show(the_view.sName)
-			the_view:InitShow()
-		end)
-	else
-		panelMgr:Show(the_view.sName)
-		if v_bInit then
-			the_view:InitShow()
-		end
+	local tCfg = _GetCfg(v_sLogicName)
+	panelMgr:Show(tCfg.Layer,tCfg.Name)
+	if v_bInit then
+		local the_view = Views[v_sLogicName]
+		the_view:InitShow()
 	end
 end
 
@@ -95,19 +94,12 @@ function ViewMgr.ShowUnique(v_sLogicName,v_bInit)
 	if v_bInit == nil then
 		v_bInit = true
 	end
-	local the_view = Views[v_sLogicName]
-	if not the_view then
-		the_view = ViewMgr.GetOrCreateView(v_sLogicName,function()
-			panelMgr:ShowUnique(the_view.sName)
-			the_view:InitShow()
-		end)
-	else
-		panelMgr:ShowUnique(the_view.sName)
-		if v_bInit then
-			the_view:InitShow()
-		end
+	local tCfg = _GetCfg(v_sLogicName)
+	panelMgr:ShowUnique(tCfg.Layer,the_view.sName)
+	if v_bInit then
+		local the_view = Views[v_sLogicName]
+		the_view:InitShow()
 	end
-	
 end
 
 

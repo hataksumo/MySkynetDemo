@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - UiRoot
+  - Back
+  - Main
+  - Front
+  - Tip
   layers:
   - Default
   - TransparentFX

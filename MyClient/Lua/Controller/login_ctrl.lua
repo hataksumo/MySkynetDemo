@@ -1,6 +1,6 @@
 local LoginCtrl = class(CtrlBase)
 
-function LoginCtrl:Ctor(v_cfg)
+function LoginCtrl:Ctor()
 	self.sIniView = "Login"
 	self.sUsrName = nil
 	self.sPasswd = nil
@@ -11,10 +11,15 @@ function LoginCtrl:Ctor(v_cfg)
 	self.CMDS["Regist"] = self.OnCmdRegist
 	self.CMDS["CancelUsrName"] = self.OnCmdCancelUsrName
 	self.CMDS["GoBackLogin"] = self.OnCmdBackLogin
-	self:AddSocketListener(20010,self.OnNetEnsureUsrName)
-	self:AddSocketListener(20011,self.OnNetEnsurePswd)
-	self:AddSocketListener(20020,self.OnNetRegist)
+	self:AddSocketListener(40010,self.OnNetEnsureUsrName)
+	self:AddSocketListener(40011,self.OnNetCheckLogin)
+	self:AddSocketListener(40020,self.OnNetRegist)
 end
+
+function LoginCtrl:Start()
+	self:ShowUniqueView("Login")
+end
+
 
 function LoginCtrl:OnCmdEnsureUsrName(v_oSender,v_sUserName)
 	self:EnsureUsrName(v_sUserName)
@@ -26,6 +31,7 @@ end
 
 
 function LoginCtrl:EnsureUsrName(v_sUserName)
+	print("LoginCtrl:EnsureUsrName")
 	if string.IsNullOrEmpty(v_sUserName) then
 		ViewMgr.SendMsg("Login","Warning",self,10005)
 		return
@@ -50,11 +56,17 @@ function LoginCtrl:EnsurePswd(v_sPswd)
 	Network.SendMsg(10010,{usrName = self.sUsrName,passwd = v_sPswd})
 end
 
-function LoginCtrl:OnNetEnsurePswd(v_tRsp)
-	print("OnNetEnsurePswd")
+
+local function _LoginSuccess(v_tRsp)
+	gAccount.InitWithLogin(v_tRsp.uid)
+	local homePageCtrl = CtrlMgr.GetOrCreateCtrl("HomePage")
+	homePageCtrl:Start()
+end
+
+function LoginCtrl:OnNetCheckLogin(v_tRsp)
+	--print("OnNetCheckLogin")
 	if v_tRsp.code == 1 then
-		local homePageCtrl = CtrlMgr.GetOrCreateCtrl("HomePage")
-		homePageCtrl:ShowUnique(true)
+		_LoginSuccess(v_tRsp)
 	elseif v_tRsp.code == 2 then
 		ViewMgr.SendMsg("Login","Warning",self,10002)
 	else
@@ -67,12 +79,10 @@ function LoginCtrl:OnCmdRegist(v_oSender,v_sUserName,v_sPswd,v_sPswdCfm)
 		ViewMgr.SendMsg("Regist","Warning",self,10005)
 		return
 	end
-
 	if not v_sPswd then
 		ViewMgr.SendMsg("Regist","Warning",self,10006)
 		return
 	end
-
 	if v_sPswd ~= v_sPswdCfm then
 		ViewMgr.SendMsg("Regist","Warning",self,10003)
 		return

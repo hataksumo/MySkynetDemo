@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 333796739
+CRC: 307976020
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a59ef587f1485d9f3e3d9477eb6cf9e7
+    Hash: 9c4122055f616ed5e992ab28638217ab
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 74619a215b279909fe03ea9175cc522a
+    Hash: 54ec38d19b98ac6a3af301bdd49a4d96
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,6 +24,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -36,8 +38,9 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 Assets:
+- Assets/Art/UI/Prefab/Main_HomePage/SetNickName.prefab
 - Assets/Art/UI/Prefab/Main_HomePage/MainPage.prefab
 Dependencies:
-- E:/WORK/MyDemo/MyClient/Assets/StreamingAssets/uicommonelement.unity3d
-- E:/WORK/MyDemo/MyClient/Assets/StreamingAssets/uielements.unity3d
-- E:/WORK/MyDemo/MyClient/Assets/StreamingAssets/uiitem.unity3d
+- E:/WORK/MySkynetDemo/MyClient/Assets/StreamingAssets/uicommonelement.unity3d
+- E:/WORK/MySkynetDemo/MyClient/Assets/StreamingAssets/uielements.unity3d
+- E:/WORK/MySkynetDemo/MyClient/Assets/StreamingAssets/uiitem.unity3d

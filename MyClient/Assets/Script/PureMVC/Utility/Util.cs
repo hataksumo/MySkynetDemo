@@ -307,6 +307,14 @@ namespace LuaFramework {
             return luaMgr.CallFunction(module + "." + func, args);
         }
 
+
+        public static object[] CallFunction(string func, params object[] args)
+        {
+            LuaManager luaMgr = AppFacade.Instance.GetManager<LuaManager>(ManagerName.Lua);
+            if (luaMgr == null) return null;
+            return luaMgr.CallFunction(func, args);
+        }
+
         private static void test()
         {
             GameObject go;

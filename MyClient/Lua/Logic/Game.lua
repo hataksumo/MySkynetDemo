@@ -23,18 +23,23 @@ local game;
 local transform;
 local gameObject;
 local WWW = UnityEngine.WWW;
+gAccount = dofile "Module/Account"
+
+local tListeners = {}
+
+
+
 
 
 --初始化完成，发送链接服务器信息--
 function Game.OnInitOK()
     --注册LuaView--
     CtrlMgr.Init();
-    print("test msg")
+    --print("test msg")
     Network.InitMsg()
-
-    print("init ok")
+    --print("init ok")
     local loginCtrl = CtrlMgr.GetOrCreateCtrl("Login")
-    loginCtrl:ShowUnique()
+    loginCtrl:Start()
 end
 
 --[[
@@ -47,10 +52,34 @@ Module层负责记录玩家的数据
 ]]
 
 
-
-
-
 --销毁--
 function Game.OnDestroy()
 	--logWarn('OnDestroy--->>>');
+end
+
+function Game.OnUpdate(v_dt)
+	for _key,oListener in pairs(tListeners) do
+		--print("Update ext key ".._key)
+		if IsObject(oListener) then
+			oListener:OnUpdate(v_dt)
+		else
+			oListener(v_dt)
+		end
+	end
+end
+
+function Game.AddUpdateListerner(v_key,v_oListerner)
+	if tListeners[v_key] then
+		print(debug.traceback())
+		print("Game.AddListerner "..v_key.."has been registed")
+		return
+	end
+	print("Add key "..v_key.." len = "..table.getCnt(tListeners))
+	tListeners[v_key] = v_oListerner
+	print("After that len = "..table.getCnt(tListeners))
+end
+
+function Game.RemoveUpdateListener(v_key,v_oListerner)
+	print("Remove key "..v_key)
+	tListeners[v_key] = nil
 end

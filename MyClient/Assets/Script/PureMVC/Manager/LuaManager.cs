@@ -21,13 +21,9 @@ namespace LuaFramework {
         }
 
         public void InitStart() {
-            Debug.Log("InitStart");
             InitLuaPath();
-            Debug.Log("InitLuaPath");
             InitLuaBundle();
-            Debug.Log("InitLuaBundle");
             this._lua.Start();    //启动LUAVM
-            Debug.Log("_lua.Start()");
             this.StartMain();
             this.StartLooper();
         }
@@ -62,7 +58,7 @@ namespace LuaFramework {
         void OpenLibs() {
             _lua.OpenLibs(LuaDLL.luaopen_pb);      
             _lua.OpenLibs(LuaDLL.luaopen_sproto_core);
-            _lua.OpenLibs(LuaDLL.luaopen_protobuf_c);
+            //_lua.OpenLibs(LuaDLL.luaopen_protobuf_c);
             _lua.OpenLibs(LuaDLL.luaopen_lpeg);
             _lua.OpenLibs(LuaDLL.luaopen_bit);
             _lua.OpenLibs(LuaDLL.luaopen_socket_core);
@@ -102,8 +98,8 @@ namespace LuaFramework {
                 _loader.AddBundle("lua/lua_protobuf.unity3d");
                 _loader.AddBundle("lua/lua_3rd_cjson.unity3d");
                 _loader.AddBundle("lua/lua_3rd_luabitop.unity3d");
-                _loader.AddBundle("lua/lua_3rd_pbc.unity3d");
-                _loader.AddBundle("lua/lua_3rd_pblua.unity3d");
+                //_loader.AddBundle("lua/lua_3rd_pbc.unity3d");
+                //_loader.AddBundle("lua/lua_3rd_pblua.unity3d");
                 _loader.AddBundle("lua/lua_3rd_sproto.unity3d");
             }
         }
@@ -119,6 +115,12 @@ namespace LuaFramework {
                 return func.LazyCall(args);
             }
             return null;
+        }
+
+        public LuaFunction GetFunction(string funcName, params object[] args)
+        {
+            LuaFunction func = _lua.GetFunction(funcName);
+            return func;
         }
 
         public void LuaGC() {

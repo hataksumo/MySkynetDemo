@@ -33,3 +33,5 @@ networkMgr = LuaHelper.GetNetManager();
 
 WWW = UnityEngine.WWW;
 GameObject = UnityEngine.GameObject;
+
+table.unpack = unpack

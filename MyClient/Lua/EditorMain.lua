@@ -54,9 +54,19 @@ function CompileSproto()
 	local sprotoParser = require "3rd/sproto/sprotoparser"
 	local schemaC2S = dofile "message_c2s"
 	local schemaS2C = dofile "message_s2c"
-	local schema = schemaC2S .. schemaS2C
-	--local schema = dofile "Message"
+	local schemaDB = dofile "db_data"
+	local sproto = require "3rd/sproto/sproto"
+	local schema = schemaC2S .. schemaS2C .. schemaDB
 	local pb = sprotoParser.parse(schema)
+	local ok = sproto.parse(schema)
+	if not ok then
+		print(schema)
+	end
+	local ok2 = sproto.new(pb)
+	if ok2 then
+		print("ok2")
+	end
+
 	local file = io.open(MyTools.MessagePath.."Message.pb","w")
 	file:write(pb)
 	file:close()

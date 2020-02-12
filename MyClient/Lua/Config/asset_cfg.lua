@@ -4,7 +4,7 @@ output from excel Asset.资源.xlsx
 配置UIPrefab的路径
 配置View的控件
 colums:
-{Key,键} ,{Ab,AssetBoundle} ,{AssetName,资源名} ,{Name,名字} ,{View,视图} ,{Path,路径} ,{Type,类型}
+{Key,键} ,{Ab,AssetBoundle} ,{Layer,层} ,{AssetName,资源名} ,{Name,名字} ,{View,视图} ,{Path,路径} ,{Type,类型}
 primary key:
 #0 [UI]: Key
 #1 [View]: Key,HelpCol,Widget
@@ -14,10 +14,11 @@ return{
 	Login = {
 		Key = "Login",
 		Ab = "Login",
+		Layer = 1,
 		AssetName = "Login",
 		Name = "LoginPanel",
 		View = "login_panel",
-		Path = "Art/UI/Prefab/Main_Login",
+		Path = "Art/UI/Prefab/Main_Login/Login",
 		Widgets = {
 			goUsrName = {Type = "GameObject",Path = "Login/UsrName"},
 			goPswd = {Type = "GameObject",Path = "Login/Passwd"},
@@ -34,10 +35,11 @@ return{
 	Regist = {
 		Key = "Regist",
 		Ab = "Login",
+		Layer = 1,
 		AssetName = "Regist",
 		Name = "RegistPanel",
 		View = "regist_panel",
-		Path = "Art/UI/Prefab/Main_Login",
+		Path = "Art/UI/Prefab/Main_Login/Regist",
 		Widgets = {
 			goUsrName = {Type = "GameObject",Path = "Regist/UsrName/InputField"},
 			comIptUsrName = {Type = "InputField",Path = "Regist/UsrName/InputField"},
@@ -54,15 +56,36 @@ return{
 	HomePage = {
 		Key = "HomePage",
 		Ab = "HomePage",
+		Layer = 1,
 		AssetName = "MainPage",
 		Name = "HomePagePanel",
 		View = "homepage_panel",
-		Path = "Art/UI/Prefab/Main_HomePage",
+		Path = "Art/UI/Prefab/Main_HomePage/MainPage",
 		Widgets = {
 			goBtnSetting = {Type = "GameObject",Path = "BtnSetting"},
 			goSettingPanel = {Type = "GameObject",Path = "SettingPanel"},
 			goBtnGoBackLogin = {Type = "GameObject",Path = "SettingPanel/BtnGoBackLogin"},
 			goBtnSettingPanelClose = {Type = "GameObject",Path = "SettingPanel/BtnClose"}
+		}
+	},
+	SetNickName = {Key = "SetNickName",Ab = "HomePage",Layer = 1,AssetName = "SetNickName",Name = "SetNickNamePanel",View = "setnickname_panel",Path = "Art/UI/Prefab/Main_HomePage/SetNickName"},
+	OnNetwork = {
+		Key = "OnNetwork",
+		Ab = "OnNetwork",
+		Layer = 99,
+		AssetName = "OnNetwork",
+		Name = "OnNetworkPanel",
+		View = "on_network_panel",
+		Path = "Art/UI/Prefab/Main_HomePage/OnNetwork",
+		Widgets = {
+			comImgSlice1 = {Type = "Image",Path = "OnNetAnim/Slice1"},
+			comImgSlice2 = {Type = "Image",Path = "OnNetAnim/Slice2"},
+			comImgSlice3 = {Type = "Image",Path = "OnNetAnim/Slice3"},
+			comImgSlice4 = {Type = "Image",Path = "OnNetAnim/Slice4"},
+			comImgSlice5 = {Type = "Image",Path = "OnNetAnim/Slice5"},
+			comImgSlice6 = {Type = "Image",Path = "OnNetAnim/Slice6"},
+			comImgSlice7 = {Type = "Image",Path = "OnNetAnim/Slice7"},
+			comImgSlice8 = {Type = "Image",Path = "OnNetAnim/Slice8"}
 		}
 	}
 }

@@ -1,10 +1,13 @@
-local playerId = nil
-
 local Account = {}
 local this = Account
+local _uid = nil
 
-Account.IsLogin = function()
-	return not playerId
+function Account.InitWithLogin(v_iUid)
+	_uid = v_iUid
+end
+
+function Account.GetUid()
+	return _uid
 end
 
 return this

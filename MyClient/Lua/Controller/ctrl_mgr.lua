@@ -28,9 +28,6 @@ function CtrlMgr.GetOrCreateCtrl(v_strLogicName)
 	end
 	local ctrlObj = ctrlClass:new(cfg)
 	ctrlList[v_strLogicName] = ctrlObj
-	if ctrlObj.sIniView == nil then
-		logError(string.format("%sCtrl don't has sIniView",ctrlObj.sIniView))
-	end
 	return ctrlList[v_strLogicName]
 end
 

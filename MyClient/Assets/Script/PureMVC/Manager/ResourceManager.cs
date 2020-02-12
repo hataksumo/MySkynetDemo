@@ -245,6 +245,13 @@ namespace LuaFramework {
             return rtn;
         }
 
+        public string LoadString(string v_path)
+        {
+            byte[] bytes = File.ReadAllBytes(v_path);
+            string rtn = System.Text.Encoding.Default.GetString(bytes);
+            return rtn;
+        }
+
     }
 }
 #else

@@ -1,23 +1,26 @@
 ManifestFileVersion: 0
-CRC: 3279247108
+CRC: 3494346478
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: login.unity3d
-      Dependencies:
-        Dependency_0: uielements.unity3d
-    Info_1:
       Name: uicommonelement.unity3d
       Dependencies: {}
-    Info_2:
+    Info_1:
       Name: uielements.unity3d
       Dependencies: {}
-    Info_3:
+    Info_2:
       Name: uiitem.unity3d
       Dependencies: {}
-    Info_4:
+    Info_3:
       Name: homepage.unity3d
       Dependencies:
         Dependency_0: uicommonelement.unity3d
         Dependency_1: uielements.unity3d
         Dependency_2: uiitem.unity3d
+    Info_4:
+      Name: login.unity3d
+      Dependencies:
+        Dependency_0: uielements.unity3d
+    Info_5:
+      Name: onnetwork.unity3d
+      Dependencies: {}

@@ -21,8 +21,26 @@ public static class CustomEditor
 
     }
 
+    [MenuItem("Custom/编译sproto")]
+    static void CompileSproto()
+    {
+        try
+        {
+            LuaState l = getAndIniLuaState();
+            l.DoFile("EditorMain");
+            LuaFunction fun = l.GetFunction("CompileSproto");
+            fun.Call();
+            l.Dispose();
+        }
+        catch (Exception ex)
+        {
+            ZFDebug.Error(ex.ToString());
+        }
+    }
+
+
     static EditorMain _client;
-    [MenuItem("Custom/执行Main")]
+    //[MenuItem("Custom/执行Main")]
     static void DoMain()
     {
         if (_client == null)
@@ -46,7 +64,7 @@ public static class CustomEditor
 
     }
 
-    [MenuItem("Custom/清空lua")]
+    //[MenuItem("Custom/清空lua")]
     static void ClearLuaState()
     {
         if (_client != null)
@@ -57,7 +75,7 @@ public static class CustomEditor
     }
 
 
-    [MenuItem("Custom/导出Excel")]
+    //[MenuItem("Custom/导出Excel")]
     static void OutputExcel()
     {
         try
@@ -76,7 +94,7 @@ public static class CustomEditor
         l.Start();
         l.OpenLibs(LuaDLL.luaopen_pb);
         l.OpenLibs(LuaDLL.luaopen_sproto_core);
-        l.OpenLibs(LuaDLL.luaopen_protobuf_c);
+        //l.OpenLibs(LuaDLL.luaopen_protobuf_c);
         l.OpenLibs(LuaDLL.luaopen_lpeg);
         l.OpenLibs(LuaDLL.luaopen_bit);
         l.OpenLibs(LuaDLL.luaopen_socket_core);
@@ -86,23 +104,6 @@ public static class CustomEditor
         l.AddSearchPath(rootPath + "/ToLua/Lua");
 
         return l;
-    }
-
-    [MenuItem("Custom/编译sproto")]
-    static void CompileSproto()
-    {
-        try
-        {
-            LuaState l = getAndIniLuaState();
-            l.DoFile("EditorMain");
-            LuaFunction fun = l.GetFunction("CompileSproto");
-            fun.Call();
-            l.Dispose();
-        }
-        catch (Exception ex)
-        {
-            ZFDebug.Error(ex.ToString());
-        }
     }
 
 

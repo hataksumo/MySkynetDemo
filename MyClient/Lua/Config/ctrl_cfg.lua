@@ -10,6 +10,6 @@ primary key:
 local _T = LangUtil.Language
 return{
 	Login = {Ctrl = "login_ctrl"},
-	Regist = {Ctrl = "regist_ctrl"},
-	HomePage = {Ctrl = "homepage_ctrl"}
+	HomePage = {Ctrl = "homepage_ctrl"},
+	OnNetwork = {Ctrl = "on_network_ctrl"}
 }

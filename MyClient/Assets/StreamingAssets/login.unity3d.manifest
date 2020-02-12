@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2317666650
+CRC: 3650764088
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6cc65cceecd8e6474ec462447e5f5684
+    Hash: 1384f3fce89b73a105229e303905b89d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c7755be2d6c27d29651cb38b7c6b0478
+    Hash: 4388fb3352ff9b6cb72eeec77d86e6af
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -39,4 +39,4 @@ Assets:
 - Assets/Art/UI/Prefab/Main_Login/Login.prefab
 - Assets/Art/UI/Prefab/Main_Login/Regist.prefab
 Dependencies:
-- E:/WORK/MyDemo/MyClient/Assets/StreamingAssets/uielements.unity3d
+- E:/WORK/MySkynetDemo/MyClient/Assets/StreamingAssets/uielements.unity3d
