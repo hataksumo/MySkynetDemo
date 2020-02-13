@@ -4,6 +4,9 @@ local sproto = require "sproto"
 local sprotoloader = require "sprotoloader"
 local netpack = require "skynet.netpack"
 local sharetable = require "skynet.sharetable"
+require "Module/Account/account"
+
+
 
 local WATCHDOG
 local CFG_LOADER = nil
@@ -11,6 +14,8 @@ local host
 local CMD = {}
 REQUEST = {}
 require "Logic/Login/login"
+LogedRequest = {}
+
 ProtoSchema = nil
 local MsgHandler = require "MsgHandler"
 account = nil
@@ -74,7 +79,17 @@ skynet.register_protocol {
 				print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
 			end	
 		else
-			print("don't has REQUEST "..msg.handler)
+			fnHandler = LogedRequest[msg.handler]
+			if fnHandler then
+				local ok,errMsg = pcall(function()
+					return fnHandler(msg.tMsg)
+				end)
+				if not ok then
+					print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
+				end
+			else
+				print("don't has REQUEST "..msg.handler)	
+			end
 			return
 		end
 		--skynet.trace()

@@ -36,6 +36,7 @@ function LoginCtrl:EnsureUsrName(v_sUserName)
 		ViewMgr.SendMsg("Login","Warning",self,10005)
 		return
 	end
+	CtrlMgr.SendMsg("OnNetwork","BeginRequest",self)
 	Network.SendMsg(10011,{usrName = v_sUserName})
 end
 
@@ -49,10 +50,12 @@ function LoginCtrl:OnNetEnsureUsrName(v_tRsp)
 	else
 		ViewMgr.SendMsg("Login","Warning",self,10000)
 	end
+	CtrlMgr.SendMsg("OnNetwork","EndRequest",self)
 end
 
 
 function LoginCtrl:EnsurePswd(v_sPswd)
+	CtrlMgr.SendMsg("OnNetwork","BeginRequest",self)
 	Network.SendMsg(10010,{usrName = self.sUsrName,passwd = v_sPswd})
 end
 
@@ -65,6 +68,7 @@ end
 
 function LoginCtrl:OnNetCheckLogin(v_tRsp)
 	--print("OnNetCheckLogin")
+	CtrlMgr.SendMsg("OnNetwork","EndRequest",self)
 	if v_tRsp.code == 1 then
 		_LoginSuccess(v_tRsp)
 	elseif v_tRsp.code == 2 then
@@ -93,23 +97,26 @@ end
 
 
 function LoginCtrl:Regist(v_sUserName,v_sPswd)
+	CtrlMgr.SendMsg("OnNetwork","BeginRequest")
 	Network.SendMsg(10020,{usrName = v_sUserName,passwd = v_sPswd})
 end
 
 function LoginCtrl:OnNetRegist(v_tRsp)
-	if v_tRsp.code == 1 then
+	CtrlMgr.SendMsg("OnNetwork","EndRequest")
+	if v_tRsp.code == 1 then--成功
 		self.sUsrName = v_tRsp.usrName
 		self.sPasswd = v_tRsp.passwd
+		CtrlMgr.SendMsg("OnNetwork","BeginRequest")
 		Network.SendMsg(10010,{usrName = self.sUsrName,passwd = self.sPasswd})
 		--ViewMgr.ShowUnique("HomePage")
-	elseif v_tRsp.code == 2 then
+	elseif v_tRsp.code == 2 then--用户名不合法
 		ViewMgr.SendMsg("Regist","Reset",self)
 		ViewMgr.SendMsg("Regist","Warning",self,10007)
-	elseif v_tRsp.code == 3 then
+	elseif v_tRsp.code == 3 then--用户名已注册
 		ViewMgr.SendMsg("Regist","Reset")
 		ViewMgr.SendMsg("Regist","Warning",self,10004)
-	elseif v_tRsp.code == 4 then
-		ViewMgr.SendMsg("Regist","Reset")
+	elseif v_tRsp.code == 4 then--密码过于简单
+		ViewMgr.SendMsg("Regist","ResetPasswd")
 		ViewMgr.SendMsg("Regist","Warning",self,10008)
 	elseif v_tRsp.code == 5 then
 		ViewMgr.SendMsg("Regist","Reset")
@@ -134,7 +141,7 @@ function LoginCtrl:OnCmdGoToRegist(v_oSender)
 	--Network.HelloToSrv("hello server")
 
 	ViewMgr.SendMsg("Login","Clear",self)
-	ViewMgr.ShowUnique("Regist")
+	self:ShowUniqueView("Regist")
 end
 
 function LoginCtrl:OnCmdCancelUsrName(v_oSender)

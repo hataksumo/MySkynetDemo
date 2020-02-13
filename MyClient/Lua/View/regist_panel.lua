@@ -15,6 +15,7 @@ function RegistView:_OnInit()
 	self.CMDS["Warning"] = self.OnCmdWarning
 	self.CMDS["HideWarning"] = self.OnCmdHideWarning
 	self.CMDS["Reset"] = self.OnCmdReset
+	self.CMDS["ResetPasswd"] = self.OnCmdResetPasswd
 end
 
 function RegistView:InitShow()
@@ -40,7 +41,7 @@ function RegistView:HideWarning()
 	self.goTxtWarning:SetActive(false)
 end
 
-function RegistView:OnCmdHideWarning()
+function RegistView:OnCmdHideWarning(v_oSender)
 	self:HideWarning()
 end
 
@@ -48,8 +49,13 @@ function RegistView:OnBtnBack()
 	CtrlMgr.SendMsg("Login","GoBackLogin",self)
 end
 
-function RegistView:OnCmdReset()
+function RegistView:OnCmdReset(v_oSender)
 	self:Clear()
+end
+
+function RegistView:OnCmdResetPasswd(v_oSender)
+	self.comIptPswd.text = ""
+	self.comIptPswdCfm.text = ""
 end
 
 function RegistView:Clear()

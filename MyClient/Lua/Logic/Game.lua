@@ -74,12 +74,9 @@ function Game.AddUpdateListerner(v_key,v_oListerner)
 		print("Game.AddListerner "..v_key.."has been registed")
 		return
 	end
-	print("Add key "..v_key.." len = "..table.getCnt(tListeners))
 	tListeners[v_key] = v_oListerner
-	print("After that len = "..table.getCnt(tListeners))
 end
 
 function Game.RemoveUpdateListener(v_key,v_oListerner)
-	print("Remove key "..v_key)
 	tListeners[v_key] = nil
 end

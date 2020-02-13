@@ -31,10 +31,11 @@ function CMD.Login(v_sUsr,v_sPswd)
 		end
 	else
 		local ok,rst = skynet.call(".sql","lua","Querycb","CheckLogin",{v_sUsr,v_sPswd})
-		if rst.cnt > 0 then
+		if rst then
 			account = {}
 			account.uid = rst.uid
 			account.passwd = v_sPswd
+			account.submission_date = rst.submission_date
 			accounts[v_sUsr] = account
 			return true,account
 		end
@@ -52,7 +53,7 @@ function CMD.Regist(v_sUsr,v_sPswd)
 			return {code = 3}
 		end
 	end
-	local ok,rtn = skynet.call(".sql","lua","Querycb","Regist",{v_sUsr,v_sPswd,"now()"})
+	local ok,rtn = skynet.call(".sql","lua","Querycb","Regist",{v_sUsr,v_sPswd,"default_"..v_sUsr,"now()"})
 	if ok then
 		return {code = 1}
 	else

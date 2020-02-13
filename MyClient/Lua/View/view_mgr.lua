@@ -85,6 +85,9 @@ function ViewMgr.Show(v_sLogicName,v_bInit)
 	panelMgr:Show(tCfg.Layer,tCfg.Name)
 	if v_bInit then
 		local the_view = Views[v_sLogicName]
+		if not the_view then
+			print("can't find the view "..v_sLogicName)
+		end
 		the_view:InitShow()
 	end
 end
@@ -95,9 +98,12 @@ function ViewMgr.ShowUnique(v_sLogicName,v_bInit)
 		v_bInit = true
 	end
 	local tCfg = _GetCfg(v_sLogicName)
-	panelMgr:ShowUnique(tCfg.Layer,the_view.sName)
+	panelMgr:ShowUnique(tCfg.Layer,tCfg.Name)
 	if v_bInit then
 		local the_view = Views[v_sLogicName]
+		if not the_view then
+			print("can't find the view "..v_sLogicName)
+		end
 		the_view:InitShow()
 	end
 end
@@ -108,9 +114,8 @@ function ViewMgr.SendMsg(v_sLogicName,v_sCmd,v_oSender,...)
 	local the_view = Views[v_sLogicName]
 	if not the_view then
 		logError(string.format("can't find the view keyed %s",v_sLogicName))
+		return
 	end
-	--local extArg = {...}
-	--logError("ViewMgr.SendMsg "..v_sCmd.." "..extArg[1])
 	the_view:CMDCallBack(v_sCmd,v_oSender,...)
 end
 

@@ -11,7 +11,7 @@ end
 
 function HomepageCtrl:Start()
 	Network.SendMsg(10030,{uid = gAccount.GetUid()})
-	ViewMgr.ShowUnique("HomePage")
+	self:ShowUniqueView("HomePage")
 end
 
 

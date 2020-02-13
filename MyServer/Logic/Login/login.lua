@@ -1,5 +1,4 @@
 local function IsAlphabet(v_cha)
-
 	local the_char = v_cha
 	if not(the_char >= string.byte('a') and the_char <= string.byte('z') 
 		or the_char >= string.byte('A') and the_char <= string.byte('Z') 
@@ -49,10 +48,11 @@ local function IsValidPasswd(v_str)
 	return hasNumber and hasAlphabet
 end
 
-local function LoginSuccess(v_uid)
-	account = {}
-	account.uid = v_uid
-	sendMsg(20011,{code = 1,uid = account.uid})
+local function LoginSuccess(v_tAccount)
+	account = Account:new()
+	account.uid = v_tAccount.uid
+	account.submission_date = v_tAccount.submission_date
+	sendMsg(40011,{code = 1,uid = account.uid})
 end
 
 
@@ -60,46 +60,47 @@ function REQUEST.Login(v_tMsg)
 	--print("usrName = "..v_tMsg.usrName.." passwd = "..v_tMsg.passwd)
 	local rst,account = skynet.call(".login","lua","Login",v_tMsg.usrName,v_tMsg.passwd)
 	if rst then
-		LoginSuccess(account.uid)
+		LoginSuccess(account)
 	else
-		sendMsg(20011,{code = 2,uid = -1})
+		sendMsg(40011,{code = 2,uid = -1})
 	end
 
 end
 
 function REQUEST.UsrNameValid(v_tMsg)
+	print("query user name "..v_tMsg.usrName)
 	local rst = skynet.call(".login","lua","HasUser",v_tMsg.usrName)
 	if rst then
-		sendMsg(20010,{code = 1,usrName = v_tMsg.usrName})
+		sendMsg(40010,{code = 1,usrName = v_tMsg.usrName})
 	else
-		sendMsg(20010,{code = 2,usrName = "guest"})
+		sendMsg(40010,{code = 2,usrName = "guest"})
 	end
 end
 
 function REQUEST.Regist(v_tMsg)
 	if string.IsNullOrEmpty(v_tMsg.usrName) then
-		sendMsg(20020,{code = 2,usrName = v_tMsg.usrName})
+		sendMsg(40020,{code = 2,usrName = v_tMsg.usrName})
 		return
 	end
 
 	if not IsValidUsrName(v_tMsg.usrName) then
-		sendMsg(20020,{code = 2,usrName = v_tMsg.usrName})
+		sendMsg(40020,{code = 2,usrName = v_tMsg.usrName})
 		return
 	end
 	if string.IsNullOrEmpty(v_tMsg.passwd) then
-		sendMsg(20020,{code = 4,usrName = v_tMsg.usrName})
+		sendMsg(40020,{code = 4,usrName = v_tMsg.usrName})
 		return
 	end
 
 	if not IsValidPasswd(v_tMsg.passwd) then
-		sendMsg(20020,{code = 4,usrName = v_tMsg.usrName})
+		sendMsg(40020,{code = 4,usrName = v_tMsg.usrName})
 		return
 	end
 
 	local rst = skynet.call(".login","lua","Regist",v_tMsg.usrName,v_tMsg.passwd)
 
 	if rst then
-		sendMsg(20020,{code = rst.code,usrName = v_tMsg.usrName,passwd = v_tMsg.passwd})
+		sendMsg(40020,{code = rst.code,usrName = v_tMsg.usrName,passwd = v_tMsg.passwd})
 		print(v_tMsg.usrName.." regist succesed")
 	end
 end
