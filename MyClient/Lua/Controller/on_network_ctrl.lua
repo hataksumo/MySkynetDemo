@@ -14,7 +14,7 @@ function OnNetworkCtrl:BeginRequest(v_oSender)
 		self:_Start()
 	end
 	self.iOnRequest = self.iOnRequest + 1
-	--print("BeginRequest self.iOnRequest = "..self.iOnRequest)
+	--print("BeginRequest self.iOnRequest = "..self.iOnRequest..debug.traceback())
 end
 
 function OnNetworkCtrl:EndRequest(v_oSender)
@@ -22,7 +22,7 @@ function OnNetworkCtrl:EndRequest(v_oSender)
 	if self.iOnRequest == 0 then	
 		self:_End()
 	end
-	--print("EndRequest self.iOnRequest = "..self.iOnRequest)
+	--print("EndRequest self.iOnRequest = "..self.iOnRequest..debug.traceback())
 end
 
 function OnNetworkCtrl:Prepare()

@@ -103,7 +103,6 @@ function LoginCtrl:OnNetRegist(v_tRsp)
 	if v_tRsp.code == 1 then--成功
 		self.sUsrName = v_tRsp.usrName
 		self.sPasswd = v_tRsp.passwd
-		CtrlMgr.SendMsg("OnNetwork","BeginRequest")
 		Network.SendMsg(10010,{usrName = self.sUsrName,passwd = self.sPasswd})
 	elseif v_tRsp.code == 2 then--用户名不合法
 		ViewMgr.SendMsg("Regist","Reset",self)
