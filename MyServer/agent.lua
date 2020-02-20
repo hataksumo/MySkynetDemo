@@ -3,8 +3,9 @@ local socket = require "skynet.socket"
 local sproto = require "sproto"
 local sprotoloader = require "sprotoloader"
 local netpack = require "skynet.netpack"
-local sharetable = require "skynet.sharetable"
+sharetable = require "skynet.sharetable"
 require "Module/Account/account"
+require "Module/Player/player"
 
 
 
@@ -14,11 +15,14 @@ local host
 local CMD = {}
 REQUEST = {}
 require "Logic/Login/login"
-LogedRequest = {}
+ACCOUNT_REQUEST = {}
+require "Logic/Login/get_player"
+PLAYER_REQUEST = {}
 
 ProtoSchema = nil
 local MsgHandler = require "MsgHandler"
-account = nil
+g_account = nil
+g_player = nil
 
 
 local client_fd
@@ -38,6 +42,8 @@ local function send_heartbeat(pack)
 	local package = string.pack("<HHHs2", #pack+6,NetProtoS2CType.HeartBeat,HeartBeatIdx,pack)
 	socket.write(client_fd, package)
 end
+
+
 
 skynet.register_protocol {
 	name = "client",
@@ -64,22 +70,14 @@ skynet.register_protocol {
 			return
 		end
 		--print("msg = "..print_table(msg))
-
 		if not msg.handler then
 			print(string.format("iMsgId = %d don't has handler",iMsgId))
 			print( "msg = "..print_table(msg))
 			return
 		end
-		local fnHandler = REQUEST[msg.handler]
-		if fnHandler then
-			local ok,errMsg = pcall(function()
-				return fnHandler(msg.tMsg)
-			end)
-			if not ok then
-				print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
-			end	
-		else
-			fnHandler = LogedRequest[msg.handler]
+
+		if g_player then
+			local fnHandler = PLAYER_REQUEST[msg.handler]
 			if fnHandler then
 				local ok,errMsg = pcall(function()
 					return fnHandler(msg.tMsg)
@@ -87,13 +85,40 @@ skynet.register_protocol {
 				if not ok then
 					print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
 				end
+				return
 			else
-				print("don't has REQUEST "..msg.handler)	
+				print("don't has PLAYER_REQUEST "..msg.handler)
 			end
-			return
 		end
-		--skynet.trace()
 
+		if g_account then
+			local fnHandler = ACCOUNT_REQUEST[msg.handler]
+			if fnHandler then
+				local ok,errMsg = pcall(function()
+					return fnHandler(msg.tMsg)
+				end)
+				if not ok then
+					print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
+				end
+				return
+			else
+				print("don't has PLAYER_REQUEST "..msg.handler)
+			end
+		end
+
+		local fnHandler = REQUEST[msg.handler]
+		if fnHandler then
+			local ok,errMsg = pcall(function()
+				return fnHandler(msg.tMsg)
+			end)
+			if not ok then
+				print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
+			end
+		else
+			print("don't has REQUEST "..msg.handler)
+		end
+		return
+		--skynet.trace()
 	end
 }
 

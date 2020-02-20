@@ -11,14 +11,15 @@ lua class
 
 local ClassDefineMt = {}
 function ClassDefineMt.__index( tbl, key )
-		local tBaseClass = tbl.__tbl_Baseclass__
-		for i = 1, #tBaseClass do
-			local xValue = rawget(tBaseClass[i],key)
-			if xValue then
-				rawset( tbl, key, xValue )
-				return xValue
-			end
+	local tBaseClass = tbl.__tbl_Baseclass__
+	for i = 1, #tBaseClass do
+		local xValue = rawget(tBaseClass[i],key)
+		if xValue then
+			rawset( tbl, key, xValue )
+			return xValue
 		end
+	end
+    print("can't find "..key.." in table\n"..debug.traceback())
 end
 
         

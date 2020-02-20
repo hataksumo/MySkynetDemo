@@ -33,18 +33,18 @@ end
 
 function LoginView:OnBtnEnsureClick()
 	if self.mod == 1 then
-		CtrlMgr.SendMsg("Login","EnsureUsrName",self,self.comIptUserName.text)
+		self:SendCtrlMsg("Login","EnsureUsrName",self.comIptUserName.text)
 	elseif self.mod == 2 then
-		CtrlMgr.SendMsg("Login","EnsurePswd",self,self.comIptPasswd.text)
+		self:SendCtrlMsg("Login","EnsurePswd",self.comIptPasswd.text)
 	end
 end
 
 function LoginView:OnBtnRegist()
-	CtrlMgr.SendMsg("Login","GoToRegist",self)
+	self:SendCtrlMsg("Login","GoToRegist")
 end
 
 function LoginView:OnBtnBack()
-	CtrlMgr.SendMsg("Login","CancelUsrName",self)
+	self:SendCtrlMsg("Login","CancelUsrName")
 end
 
 function LoginView:ChangeMod(v_mod)

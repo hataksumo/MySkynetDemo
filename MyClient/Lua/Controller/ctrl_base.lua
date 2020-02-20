@@ -5,21 +5,39 @@ function CtrlBase:Ctor(v_cfg)
 	self.CMDS = {}
 	self.CMDS["Start"] = self.OnCmdStart
 	self.CMDS["Init"] = self.OnCmdInit
+	self.CMDS["Exit"] = self.OnCmdExit
 	self.pending = true
 	self.arrPendingCmds = {}
+	self.arrCreatedView = {}
 	-- self.bAwake = false
 end
 
-function CtrlBase:Finalize()
+function CtrlBase:Finalize(v_bDestroyCreatedView)
 	--清除绑定的消息
-	for _i,tListenerCfg in ipairs(arrEventListerer) do
+	print("CtrlBase:Finalize")
+	for _i,tListenerCfg in ipairs(self.arrEventListerer) do
 		Event.RemoveListener(tListenerCfg.id,tListenerCfg.handler)
 	end
+	if v_bDestroyCreatedView == nil then
+		v_bDestroyCreatedView = true
+	end
+	if v_bDestroyCreatedView then
+		self:DestroyCreatedView()
+	end
+
 	self:_OnFinalize()
 end
 
 function CtrlBase:_OnFinalize()
 	-- body
+end
+
+function CtrlBase:Exit()
+	CtrlMgr.RemoveCtrl(self.sLogicName)
+end
+
+function CtrlBase:OnCmdExit(v_oSender)
+	self:Exit()
 end
 
 function CtrlBase:CMDCallBack(v_cmd,v_oSender,...)
@@ -62,6 +80,7 @@ end
 function CtrlBase:PrepareView(v_sViewName,v_fnOther)
 	self:BeginPending()
 	ViewMgr.GetOrCreateView(v_sViewName,function()
+		table.insert(self.arrCreatedView,v_sViewName)
 		self:PendingFinish()
 	end)
 end
@@ -74,18 +93,20 @@ function CtrlBase:ShowView(v_sViewName)
 		ViewMgr.GetOrCreateView(v_sViewName,function()
 			self:PendingFinish()
 			ViewMgr.Show(v_sViewName)
+			table.insert(self.arrCreatedView,v_sViewName)
 		end)
 	end
 end
 
 function CtrlBase:ShowUniqueView(v_sViewName)
 	if ViewMgr.HasView(v_sViewName) then
-		ViewMgr.Show(v_sViewName)
+		ViewMgr.ShowUnique(v_sViewName)
 	else
 		self:BeginPending()
 		ViewMgr.GetOrCreateView(v_sViewName,function()
 			self:PendingFinish()
-			ViewMgr.Show(v_sViewName)
+			ViewMgr.ShowUnique(v_sViewName)
+			table.insert(self.arrCreatedView,v_sViewName)
 		end)
 	end
 end
@@ -103,11 +124,51 @@ function CtrlBase:OnCmdStart(v_oSender)
 	self:Start(v_oSender)
 end
 
-function CtrlBase:AddSocketListener(v_iMsgId,v_fnHandler,...)
+function CtrlBase:AddSocketListener(v_iMsgId,v_fnHandler,v_bEndPending)
+	if v_bEndPending == nil then
+		v_bEndPending = true
+	end
 	table.insert(self.arrEventListerer,{id = v_iMsgId,handler = v_fnHandler})
-	Event.AddListener(v_iMsgId,v_fnHandler,self)
+	local fnCallBack = v_fnHandler
+	if v_bEndPending then
+		fnCallBack = function(v_self,...)
+			local params = {...}
+			local ok,errMsg = pcall(function()
+				v_fnHandler(v_self,table.unpack(params))
+				Network.EndRequest()
+			end)
+			if not ok then
+				print("An error occured while callback from msgId "..v_iMsgId..", errMsg is \n"..errMsg.."\n"..debug.traceback())
+			end
+		end
+	end
+	Event.AddListener(v_iMsgId,fnCallBack,self)
 end
 
-function CtrlBase:RegistUpdate()
-	
+function CtrlBase:RegistUpdate(v_key)
+	Game.AddUpdateListerner(v_key,self)
+end
+
+function CtrlBase:RemoveUpdate(v_key)
+	Game.RemoveUpdateListener(v_key,self)
+end
+
+function CtrlBase:SendViewMsg(v_sViewLogicName,v_sCmd,...)
+	ViewMgr.SendMsg(v_sViewLogicName,v_sCmd,self,...)
+end
+function CtrlBase:SendCtrlMsg(v_sCtrlLogicName,v_sCmd,...)
+	CtrlMgr.SendMsg(v_sCtrlLogicName,v_sCmd,self,...)
+end
+
+function CtrlBase:DestroyCreatedView()
+	--print("CtrlBase:DestroyCreatedView")
+	for _i,val in ipairs(self.arrCreatedView) do
+		--print("DestroyView "..val)
+		ViewMgr.DestroyView(val)
+	end
+	self.arrCreatedView = {}
+end
+
+function CtrlBase:ToString()
+	return self.sLogicName.."Ctrl"
 end

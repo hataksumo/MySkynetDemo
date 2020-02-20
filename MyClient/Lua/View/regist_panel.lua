@@ -24,7 +24,7 @@ function RegistView:InitShow()
 end
 
 function RegistView:OnBtnRegist()
-	CtrlMgr.SendMsg("Login","Regist",self,self.comIptUsrName.text,self.comIptPswd.text,self.comIptPswdCfm.text)
+	self:SendCtrlMsg("Login","Regist",self.comIptUsrName.text,self.comIptPswd.text,self.comIptPswdCfm.text)
 end
 
 function RegistView:Warning(v_iWarningId)

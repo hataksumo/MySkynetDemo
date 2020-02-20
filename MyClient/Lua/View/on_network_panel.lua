@@ -16,7 +16,7 @@ function OnNetworkView:_OnInit()
 end
 
 
-function OnNetworkView:Update(v_ft)
+function OnNetworkView:Update(v_oSender,v_ft)
 	local iSelectBar = math.fmod(math.floor(v_ft / self.INTEVAL),#self.tarrShowBars) + 1
 	for _i,comImgBar in ipairs(self.tarrShowBars) do
 		local c = Color.New(0.6226415, 0.6020826, 0.6020826, 1)

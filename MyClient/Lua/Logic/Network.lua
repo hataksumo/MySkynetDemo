@@ -102,6 +102,14 @@ function Network.Unload()
     logWarn('Unload Network...')
 end
 
+function Network.BeginRequest()
+    CtrlMgr.SendMsg("OnNetwork","BeginRequest")
+end
+
+function Network.EndRequest()
+    CtrlMgr.SendMsg("OnNetwork","EndRequest")
+end
+
 function Network.InitMsg()
     --初始化协议
     -- local spbinData = resMgr:LoadBinaryData(MyTools.MessagePath.."Message.pb")
@@ -129,7 +137,8 @@ function Network.InitMsg()
 end
 
 
-function Network.SendMsg(v_iMsgId,v_tMsg)
+function Network.SendMsg(v_iMsgId,v_tMsg,v_bPending)
+    v_bPending = v_bPending or true
     local theMsgCfg = msgCfgs.C2S[v_iMsgId]
     if not theMsgCfg then
         v_iMsgId = v_iMsgId or nil
@@ -139,14 +148,18 @@ function Network.SendMsg(v_iMsgId,v_tMsg)
     --print("encode table : "..print_table(v_tMsg))
     --print("encode msg into "..theMsgCfg.ProtoName)
 
-    -- if not ProtoSchema:exist_type(theMsgCfg.ProtoName) then
-    --     print("don't have ProtoName "..theMsgCfg.ProtoName)
-    -- end
+    if not ProtoSchema:exist_type(theMsgCfg.ProtoName) then
+        print("don't have ProtoName "..theMsgCfg.ProtoName.." "..debug.traceback())
+        return
+    end
     local sProtoStrBuf = ProtoSchema:encode(theMsgCfg.ProtoName,v_tMsg)
     --print(string.printByte(sProtoStrBuf))
 
     --local tbp = ProtoSchema:decode(theMsgCfg.ProtoName,sProtoStrBuf)
     --print("tbp = {\n"..print_table(tbp).."\n}")
+    if v_bPending then
+        Network.BeginRequest()
+    end
     networkMgr:SendMessage(ProtocalC2S.Msg,v_iMsgId,sProtoStrBuf)
 end
 

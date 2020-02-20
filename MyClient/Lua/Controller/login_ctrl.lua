@@ -17,6 +17,7 @@ function LoginCtrl:Ctor()
 end
 
 function LoginCtrl:Start()
+	print("LoginCtrl:Start")
 	self:ShowUniqueView("Login")
 end
 
@@ -31,12 +32,10 @@ end
 
 
 function LoginCtrl:EnsureUsrName(v_sUserName)
-	print("LoginCtrl:EnsureUsrName")
 	if string.IsNullOrEmpty(v_sUserName) then
 		ViewMgr.SendMsg("Login","Warning",self,10005)
 		return
 	end
-	CtrlMgr.SendMsg("OnNetwork","BeginRequest",self)
 	Network.SendMsg(10011,{usrName = v_sUserName})
 end
 
@@ -50,27 +49,27 @@ function LoginCtrl:OnNetEnsureUsrName(v_tRsp)
 	else
 		ViewMgr.SendMsg("Login","Warning",self,10000)
 	end
-	CtrlMgr.SendMsg("OnNetwork","EndRequest",self)
 end
 
 
 function LoginCtrl:EnsurePswd(v_sPswd)
-	CtrlMgr.SendMsg("OnNetwork","BeginRequest",self)
 	Network.SendMsg(10010,{usrName = self.sUsrName,passwd = v_sPswd})
 end
 
 
-local function _LoginSuccess(v_tRsp)
+function LoginCtrl:_LoginSuccess(v_tRsp)
 	gAccount.InitWithLogin(v_tRsp.uid)
-	local homePageCtrl = CtrlMgr.GetOrCreateCtrl("HomePage")
-	homePageCtrl:Start()
+	local selectPlayerCtrl = CtrlMgr.GetOrCreateCtrl("SelectPlayer")
+	selectPlayerCtrl:Start()
+	--self:Exit()
+	-- local homePageCtrl = CtrlMgr.GetOrCreateCtrl("HomePage")
+	-- homePageCtrl:Start()
+
 end
 
 function LoginCtrl:OnNetCheckLogin(v_tRsp)
-	--print("OnNetCheckLogin")
-	CtrlMgr.SendMsg("OnNetwork","EndRequest",self)
 	if v_tRsp.code == 1 then
-		_LoginSuccess(v_tRsp)
+		self:_LoginSuccess(v_tRsp)
 	elseif v_tRsp.code == 2 then
 		ViewMgr.SendMsg("Login","Warning",self,10002)
 	else
@@ -97,18 +96,15 @@ end
 
 
 function LoginCtrl:Regist(v_sUserName,v_sPswd)
-	CtrlMgr.SendMsg("OnNetwork","BeginRequest")
 	Network.SendMsg(10020,{usrName = v_sUserName,passwd = v_sPswd})
 end
 
 function LoginCtrl:OnNetRegist(v_tRsp)
-	CtrlMgr.SendMsg("OnNetwork","EndRequest")
 	if v_tRsp.code == 1 then--成功
 		self.sUsrName = v_tRsp.usrName
 		self.sPasswd = v_tRsp.passwd
 		CtrlMgr.SendMsg("OnNetwork","BeginRequest")
 		Network.SendMsg(10010,{usrName = self.sUsrName,passwd = self.sPasswd})
-		--ViewMgr.ShowUnique("HomePage")
 	elseif v_tRsp.code == 2 then--用户名不合法
 		ViewMgr.SendMsg("Regist","Reset",self)
 		ViewMgr.SendMsg("Regist","Warning",self,10007)

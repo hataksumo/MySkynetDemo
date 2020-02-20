@@ -20,9 +20,7 @@ end
 function CMD.Login(v_sUsr,v_sPswd)
 	local account = accounts[v_sUsr]
 
-	print(string.format("login request v_sUsr = %s, v_sPswd = %s",v_sUsr,v_sPswd))
-
-
+	--print(string.format("login request v_sUsr = %s, v_sPswd = %s",v_sUsr,v_sPswd))
 	if account and account.passwd then
 		if v_sPswd == account.passwd then
 			return true,account
@@ -31,7 +29,7 @@ function CMD.Login(v_sUsr,v_sPswd)
 		end
 	else
 		local ok,rst = skynet.call(".sql","lua","Querycb","CheckLogin",{v_sUsr,v_sPswd})
-		if rst then
+		if rst.cnt > 0 then
 			account = {}
 			account.uid = rst.uid
 			account.passwd = v_sPswd

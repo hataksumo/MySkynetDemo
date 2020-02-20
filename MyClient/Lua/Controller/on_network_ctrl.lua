@@ -14,6 +14,7 @@ function OnNetworkCtrl:BeginRequest(v_oSender)
 		self:_Start()
 	end
 	self.iOnRequest = self.iOnRequest + 1
+	--print("BeginRequest self.iOnRequest = "..self.iOnRequest)
 end
 
 function OnNetworkCtrl:EndRequest(v_oSender)
@@ -21,6 +22,7 @@ function OnNetworkCtrl:EndRequest(v_oSender)
 	if self.iOnRequest == 0 then	
 		self:_End()
 	end
+	--print("EndRequest self.iOnRequest = "..self.iOnRequest)
 end
 
 function OnNetworkCtrl:Prepare()
@@ -28,18 +30,18 @@ function OnNetworkCtrl:Prepare()
 end
 
 function OnNetworkCtrl:_Start()
-	Game.AddUpdateListerner("OnNetwork",self)
+	self:RegistUpdate("OnNetwork")
 	self.ft = 0
 end
 
 function OnNetworkCtrl:_End()
 	ViewMgr.HideView("OnNetwork")
-	Game.RemoveUpdateListener("OnNetwork",self)
+	self:RemoveUpdate("OnNetwork")
 end
 
 function OnNetworkCtrl:OnUpdate(v_dt)
 	self.ft = self.ft + v_dt
-	ViewMgr.SendMsg("OnNetwork","Update",self.ft)
+	self:SendViewMsg("OnNetwork","Update",self.ft)
 	if self.ft > self.MAX_PENDING then
 		self.iOnRequest = 0
 		self:_End()

@@ -49,10 +49,11 @@ local function IsValidPasswd(v_str)
 end
 
 local function LoginSuccess(v_tAccount)
-	account = Account:new()
-	account.uid = v_tAccount.uid
-	account.submission_date = v_tAccount.submission_date
-	sendMsg(40011,{code = 1,uid = account.uid})
+	g_account = Account:new()
+	g_account.uid = v_tAccount.uid
+	g_account.submission_date = v_tAccount.submission_date
+	--print("LoginSuccess")
+	sendMsg(40011,{code = 1,uid = g_account.uid})
 end
 
 
@@ -68,7 +69,7 @@ function REQUEST.Login(v_tMsg)
 end
 
 function REQUEST.UsrNameValid(v_tMsg)
-	print("query user name "..v_tMsg.usrName)
+	--print("query user name "..v_tMsg.usrName)
 	local rst = skynet.call(".login","lua","HasUser",v_tMsg.usrName)
 	if rst then
 		sendMsg(40010,{code = 1,usrName = v_tMsg.usrName})
@@ -102,5 +103,13 @@ function REQUEST.Regist(v_tMsg)
 	if rst then
 		sendMsg(40020,{code = rst.code,usrName = v_tMsg.usrName,passwd = v_tMsg.passwd})
 		print(v_tMsg.usrName.." regist succesed")
+	end
+end
+
+function REQUEST.BackToLogin(v_tMsg)
+	if v_tMsg.account_id == v_tMsg.account_id then
+		g_account = nil
+		g_player = nil
+		sendMsg(40001,{code = 1})
 	end
 end

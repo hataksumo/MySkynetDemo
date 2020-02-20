@@ -10,7 +10,29 @@ primary key:
 #1 [View]: Key,HelpCol,Widget
 ]]
 local _T = LangUtil.Language
-return{
+if ddt["asset_cfg"] ~= nil then
+	return ddt["asset_cfg"]
+end
+local data = {
+	OnNetwork = {
+		Key = "OnNetwork",
+		Ab = "OnNetwork",
+		Layer = 99,
+		AssetName = "OnNetwork",
+		Name = "OnNetworkPanel",
+		View = "on_network_panel",
+		Path = "Art/UI/Prefab/Main_HomePage/OnNetwork",
+		Widgets = {
+			comImgSlice1 = {Type = "Image",Path = "OnNetAnim/Slice1"},
+			comImgSlice2 = {Type = "Image",Path = "OnNetAnim/Slice2"},
+			comImgSlice3 = {Type = "Image",Path = "OnNetAnim/Slice3"},
+			comImgSlice4 = {Type = "Image",Path = "OnNetAnim/Slice4"},
+			comImgSlice5 = {Type = "Image",Path = "OnNetAnim/Slice5"},
+			comImgSlice6 = {Type = "Image",Path = "OnNetAnim/Slice6"},
+			comImgSlice7 = {Type = "Image",Path = "OnNetAnim/Slice7"},
+			comImgSlice8 = {Type = "Image",Path = "OnNetAnim/Slice8"}
+		}
+	},
 	Login = {
 		Key = "Login",
 		Ab = "Login",
@@ -68,24 +90,21 @@ return{
 			goBtnSettingPanelClose = {Type = "GameObject",Path = "SettingPanel/BtnClose"}
 		}
 	},
-	SetNickName = {Key = "SetNickName",Ab = "HomePage",Layer = 1,AssetName = "SetNickName",Name = "SetNickNamePanel",View = "setnickname_panel",Path = "Art/UI/Prefab/Main_HomePage/SetNickName"},
-	OnNetwork = {
-		Key = "OnNetwork",
-		Ab = "OnNetwork",
-		Layer = 99,
-		AssetName = "OnNetwork",
-		Name = "OnNetworkPanel",
-		View = "on_network_panel",
-		Path = "Art/UI/Prefab/Main_HomePage/OnNetwork",
+	SetNickName = {
+		Key = "SetNickName",
+		Ab = "HomePage",
+		Layer = 1,
+		AssetName = "SetNickName",
+		Name = "SetNickNamePanel",
+		View = "setnickname_panel",
+		Path = "Art/UI/Prefab/Main_HomePage/SetNickName",
 		Widgets = {
-			comImgSlice1 = {Type = "Image",Path = "OnNetAnim/Slice1"},
-			comImgSlice2 = {Type = "Image",Path = "OnNetAnim/Slice2"},
-			comImgSlice3 = {Type = "Image",Path = "OnNetAnim/Slice3"},
-			comImgSlice4 = {Type = "Image",Path = "OnNetAnim/Slice4"},
-			comImgSlice5 = {Type = "Image",Path = "OnNetAnim/Slice5"},
-			comImgSlice6 = {Type = "Image",Path = "OnNetAnim/Slice6"},
-			comImgSlice7 = {Type = "Image",Path = "OnNetAnim/Slice7"},
-			comImgSlice8 = {Type = "Image",Path = "OnNetAnim/Slice8"}
+			goTxtWarning = {Type = "GameObject",Path = "Warning"},
+			comTxtWarning = {Type = "Text",Path = "Warning/Text"},
+			comIptNickName = {Type = "InputField",Path = "IptNickName"},
+			goBtnEnsure = {Type = "GameObject",Path = "BtnEnsure"}
 		}
 	}
 }
+ddt["asset_cfg"] = data
+return data

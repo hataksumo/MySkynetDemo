@@ -31,9 +31,15 @@ function CMD.start()
 end
 --sqlres1  {errno=1064,sqlstate="42000",err="You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '{[\\\"1601307937324765076\\\"]={[1]=\\\"1\\\",[2]=\\\"1\\\",[3]=\\\"360\\\",},}'' WHERE rl_uID=1' at line 1",badresult=true,}  
 local function _safeQuery(v_sql)
+    if not v_sql then
+        return false,nil
+    end
+
+
     local res = nil
     local ok,errMsg = pcall(function()
         res = db:query(v_sql)
+        --print(v_sql)
     end
     )
     if not ok then
@@ -88,7 +94,7 @@ skynet.start(function(v_cfg)
       print("db connected")
       db:query("set charset utf8");
     end
-    print("==========begin connect===============")
+    --print("==========begin connect===============")
     local rst,err = pcall(function()
        db=mysql.connect({
         host="192.168.1.3",
@@ -105,14 +111,14 @@ skynet.start(function(v_cfg)
         print("err "..err or "nil")
     end
     
-    print("===============finished===============")
+    --print("===============finished===============")
 	if not db then
 		print("failed to connect mysql")
 	end
 	db:query("set names utf8")
     --
     skynet.dispatch("lua", function(session, source, cmd, subcmd, ...)
-		local f = assert(CMD[cmd])
+		local f = assert(CMD[cmd],"can't find "..cmd.." in CMD")
         if session == 0 then 
             f(subcmd, ...)
         else 

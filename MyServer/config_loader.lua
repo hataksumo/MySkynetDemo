@@ -1,6 +1,7 @@
 local sproto = require "sprotoparser"
 local skynet = require "skynet"
 local cfg_msg = require "Config/msg_cfg"
+local cfg_item = require "Config/item"
 local sharetable = require "skynet.sharetable"
 
 
@@ -17,11 +18,13 @@ skynet.start(function()
 	local strC2S = dofile(v_tConf.c2s)
 	local strS2C = dofile(v_tConf.s2c)
 	local strDb = dofile(v_tConf.db)
-	local strPb = strC2S .. strS2C..strDb
+	local strPb = strC2S..strS2C..strDb
+
 	local binPb = sproto.parse(strPb)
 	local pb = {}
 	pb.sbin = binPb
 	sharetable.loadtable("pb",pb)
-	sharetable.loadtable("cfg_msg",require "Config/msg_cfg")
+	sharetable.loadtable("cfg_msg",cfg_msg)
+	sharetable.loadtable("cfg_item",cfg_item)
 end
 )

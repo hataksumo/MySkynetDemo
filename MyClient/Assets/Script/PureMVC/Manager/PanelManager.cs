@@ -78,14 +78,14 @@ namespace LuaFramework {
             //go.transform.localScale = Vector3.one;
             //go.transform.localPosition = Vector3.zero;
             RectTransform rt = go.GetComponent<RectTransform>();
-            rt.localPosition = Vector3.zero;
-            rt.localScale = Vector3.one;
-            rt.localRotation = Quaternion.Euler(0, 0, 0);
-            rt.anchorMin = new Vector2(0.5f, 0.5f);
-            rt.anchorMax = new Vector2(0.5f, 0.5f);
-            rt.pivot = new Vector2(0.5f, 0.5f);
-            rt.sizeDelta = new Vector2(750,1334);
-            rt.ForceUpdateRectTransforms();
+            //rt.localPosition = Vector3.zero;
+            //rt.localScale = Vector3.one;
+            //rt.localRotation = Quaternion.Euler(0, 0, 0);
+            //rt.anchorMin = new Vector2(0.5f, 0.5f);
+            //rt.anchorMax = new Vector2(0.5f, 0.5f);
+            //rt.pivot = new Vector2(0.5f, 0.5f);
+            //rt.sizeDelta = new Vector2(750,1334);
+            //rt.ForceUpdateRectTransforms();
             var comLuabehaviour = go.AddComponent<LuaBehaviour>();
             comLuabehaviour.sLogicName = v_logicName;
             comLuabehaviour.sBundleName = v_abname;
@@ -129,6 +129,19 @@ namespace LuaFramework {
             });
         }
 
+
+        public bool HasePanel(int v_layer, string name)
+        {
+            var panelName = name;
+            Transform Parent = getParent(v_layer);
+            var panelObj = Parent.Find(panelName);
+            if (panelObj == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// πÿ±’√Ê∞Â
         /// </summary>
@@ -141,6 +154,7 @@ namespace LuaFramework {
                 ZFDebug.Error("ClosePanel can't find the node " + name);
                 return;
             };
+            panelObj.SetParent(null);
             Destroy(panelObj.gameObject);
         }
 
@@ -175,7 +189,7 @@ namespace LuaFramework {
             for (int i = 0; i < cnt; i++)
             {
                 GameObject childGo = Parent.GetChild(i).gameObject;
-                if (childGo.name == name || childGo.name == "Back")
+                if (childGo.name == name)
                 {
                     childGo.SetActive(true);
                 }

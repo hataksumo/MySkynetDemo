@@ -10,20 +10,31 @@ primary key:
 #1 [MsgS2C]: MsgType,IntKey
 ]]
 local _T = LangUtil.Language
-return{
+if ddt["msg_cfg"] ~= nil then
+	return ddt["msg_cfg"]
+end
+local data = {
 	C2S = {
+		[10001] = {ProtoName = "ReqBackToLogin"},--返回登陆
 		[10010] = {ProtoName = "ReqLogin"},--登陆请求
 		[10011] = {ProtoName = "ReqUsrNameValid"},--验证账号
 		[10020] = {ProtoName = "ReqRegist"},--注册
-		[10030] = {ProtoName = "ReqPullPlayerInfo"},--拉取角色信息
-		[10040] = {ProtoName = "ReqSetNickName"}--设置昵称
+		[10030] = {ProtoName = "ReqPullPlayerList"},--拉取角色列表
+		[10031] = {ProtoName = "ReqPullPlayerInfo"},--拉取角色信息
+		[10032] = {ProtoName = "ReqNewPlayer"},--新建角色
+		[10033] = {ProtoName = "ReqChangeNickName"}--更改角色昵称
 	},
 	S2C = {
 		[40000] = {ProtoName = "RspERR"},--错误
+		[40001] = {ProtoName = "RspBackToLogin"},--返回登陆回复
 		[40010] = {ProtoName = "RspUsrNameValid"},--验证账号回复
 		[40011] = {ProtoName = "RspLogin"},--登陆请求回复
 		[40020] = {ProtoName = "RspRegist"},--注册请求回复
-		[40030] = {ProtoName = "RspPullPlayerInfo"},--拉取角色信息回复
-		[40040] = {ProtoName = "RspSetNickName"}--设置昵称回复
+		[40030] = {ProtoName = "RspPullPlayerList"},--拉取角色列表回复
+		[40031] = {ProtoName = "RspPullPlayerInfo"},--拉取角色信息回复
+		[40032] = {ProtoName = "RspNewPlayer"},--新建角色回复
+		[40033] = {ProtoName = "RspChangeNickName"}--设置昵称回复
 	}
 }
+ddt["msg_cfg"] = data
+return data

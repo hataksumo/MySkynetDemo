@@ -21,8 +21,18 @@ function CtrlMgr.GetOrCreateCtrl(v_strLogicName)
 	if not cfg then
 		logError(string.format("ctrlCfg[%s] = nil",v_strLogicName))
 	end
+	
 	local ctrlCodePath = "Controller/"..cfg.Ctrl
-	local ctrlClass,errMsg = require(ctrlCodePath)
+
+	local ctrlClass,errMsg = nil,nil
+	local ok,errMsg = pcall(function()
+		ctrlClass,errMsg = dofile(ctrlCodePath)
+	end)
+	if not ok then
+		print("an error occured while dofile "..ctrlCodePath.."\n".."errMsg is "..errMsg.."\n"..debug.traceback())
+		return
+	end
+
 	if type(ctrlClass) == "boolean" then
 		logError("class is wrong ")
 	end
@@ -39,7 +49,7 @@ end
 --移除控制器--
 function CtrlMgr.RemoveCtrl(v_strLogicName)
 	if ctrlList[v_strLogicName] then
-		ctrlList[v_strLogicName]:finalize()
+		ctrlList[v_strLogicName]:Finalize()
 	end
 	ctrlList[v_strLogicName] = nil;
 end
@@ -51,6 +61,17 @@ function CtrlMgr.SendMsg(v_sLogicName,v_sCmd,v_oSender,...)
 		logError(string.format("can't find the view keyed %s",v_sLogicName))
 		return
 	end
-	the_ctrl:CMDCallBack(v_sCmd,v_oSender,...)
+	local params = {...}
+	local ok,errMsg = pcall(function()
+		the_ctrl:CMDCallBack(v_sCmd,v_oSender,table.unpack(params))
+	end)
+	if not ok then
+		local name = ""
+		if IsObject(v_oSender) then
+			name = v_oSender:ToString()
+		end
+		print("An error occured while "..name.. " calling CtrlMgr.SendMsg "..v_sLogicName.." : "..v_sCmd..", errMsg is \n"..errMsg.."\n"..debug.traceback())
+		return
+	end
 end
 

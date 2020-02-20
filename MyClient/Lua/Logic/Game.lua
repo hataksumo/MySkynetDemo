@@ -9,10 +9,16 @@
 --local sproto = require "3rd/sproto/sproto"
 --local core = require "sproto.core"
 --local print_r = require "3rd/sproto/print_r"
+ddt = {}
 dofile "Controller/ctrl_mgr"
 dofile "View/view_mgr"
 dofile "Common/functions"
+dofile "Common/string_funs"
 dofile "Common/words_mgr"
+dofile "Module/Player"
+
+
+
 abAssetCfg = dofile "Config/asset_cfg"
 ctrlCfg = dofile "Config/ctrl_cfg"
 
@@ -24,7 +30,7 @@ local transform;
 local gameObject;
 local WWW = UnityEngine.WWW;
 gAccount = dofile "Module/Account"
-
+gPlayer = nil
 local tListeners = {}
 
 
@@ -40,6 +46,9 @@ function Game.OnInitOK()
     --print("init ok")
     local loginCtrl = CtrlMgr.GetOrCreateCtrl("Login")
     loginCtrl:Start()
+    -- ViewMgr.CreatePanel("Login")
+    -- ViewMgr.CreatePanel("Login")
+    -- CtrlMgr.SendMsg("Login","Exit",Game)
 end
 
 --[[

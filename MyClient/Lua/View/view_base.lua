@@ -8,8 +8,8 @@ function ViewBase:Ctor(v_cfg)
 	self.CMDS["Close"] = ViewBase.Close
 	self.CMDS["Awake"] = ViewBase.OnCmdAwake
 	self.CMDS["Start"] = ViewBase.OnCmdStart
-	self.CMDS["Click"] = ViewBase.OnCmdClick
-	self.CMDS["ClickEvent"] = ViewBase.OnCmdClickEvent
+	--self.CMDS["Click"] = ViewBase.OnCmdClick
+	--self.CMDS["ClickEvent"] = ViewBase.OnCmdClickEvent
 end
 
 function ViewBase:Init(v_obj)
@@ -129,4 +129,15 @@ end
 
 function ViewBase:GetImage(v_sPath)
 	return self:GetComponent(v_sPath,typeof(UnityEngine.UI.Image))
+end
+
+function ViewBase:SendViewMsg(v_sViewLogicName,v_sCmd,...)
+	ViewMgr.SendMsg(v_sViewLogicName,v_sCmd,self,...)
+end
+function ViewBase:SendCtrlMsg(v_sCtrlLogicName,v_sCmd,...)
+	CtrlMgr.SendMsg(v_sCtrlLogicName,v_sCmd,self,...)
+end
+
+function ViewBase:ToString()
+	return self.sLogicName.."Panel"
 end

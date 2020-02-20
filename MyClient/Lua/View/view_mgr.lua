@@ -62,10 +62,15 @@ end
 function ViewMgr.DestroyView(v_sLogicName)
 	local the_view = Views[v_sLogicName]
 	if the_view then
-		the_view:finalize()
+		the_view:Finalize()
 	end
 	local name = abAssetCfg[v_sLogicName].Name
-	panelMgr:ClosePanel(name)
+	local layer = abAssetCfg[v_sLogicName].Layer
+	if panelMgr:HasePanel(layer,name) then
+		print("panelMgr:ClosePanel "..name)
+		panelMgr:ClosePanel(layer,name)
+	end
+	Views[v_sLogicName] = nil
 end
 
 function ViewMgr.HideView(v_sLogicName)
@@ -82,12 +87,13 @@ function ViewMgr.Show(v_sLogicName,v_bInit)
 		v_bInit = true
 	end
 	local tCfg = _GetCfg(v_sLogicName)
+	local the_view = Views[v_sLogicName] 
+	if not the_view then
+		print("can't find the view "..v_sLogicName)
+		return
+	end
 	panelMgr:Show(tCfg.Layer,tCfg.Name)
 	if v_bInit then
-		local the_view = Views[v_sLogicName]
-		if not the_view then
-			print("can't find the view "..v_sLogicName)
-		end
 		the_view:InitShow()
 	end
 end
@@ -98,14 +104,19 @@ function ViewMgr.ShowUnique(v_sLogicName,v_bInit)
 		v_bInit = true
 	end
 	local tCfg = _GetCfg(v_sLogicName)
+	local the_view = Views[v_sLogicName]
+	if not the_view then
+		print("can't find the view "..v_sLogicName)
+		return
+	end
 	panelMgr:ShowUnique(tCfg.Layer,tCfg.Name)
 	if v_bInit then
-		local the_view = Views[v_sLogicName]
-		if not the_view then
-			print("can't find the view "..v_sLogicName)
-		end
 		the_view:InitShow()
 	end
+end
+
+function ViewMgr.HideAll()
+	panelMgr:ShowUnique(1,"");
 end
 
 
@@ -116,7 +127,14 @@ function ViewMgr.SendMsg(v_sLogicName,v_sCmd,v_oSender,...)
 		logError(string.format("can't find the view keyed %s",v_sLogicName))
 		return
 	end
-	the_view:CMDCallBack(v_sCmd,v_oSender,...)
+	local params = {...}
+	local ok,errMsg = pcall(function()
+		the_view:CMDCallBack(v_sCmd,v_oSender,table.unpack(params))
+	end)
+	if not ok then
+		print("An error occured while calling ViewMgr.SendMsg, errMsg is \n"..errMsg.."\n"..debug.traceback())
+		return
+	end
 end
 
 function ViewMgr.Awake(v_sLogicName,v_obj)

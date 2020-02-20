@@ -109,7 +109,6 @@ namespace LuaFramework {
             AssetBundleInfo bundleInfo = GetLoadedAssetBundle(abName);
             if (bundleInfo == null) {
                 yield return StartCoroutine(OnLoadAssetBundle(abName, typeof(T)));
-
                 bundleInfo = GetLoadedAssetBundle(abName);
                 if (bundleInfo == null) {
                     m_LoadRequests.Remove(abName);

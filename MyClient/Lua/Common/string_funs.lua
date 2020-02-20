@@ -42,6 +42,19 @@ function string.IsNullOrEmpty(v_str)
 	return v_str == nil or v_str == ""
 end
 
+local hexHash = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+
+function getHex(v_num)
+    local a1 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a2 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a3 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a4 = hexHash[v_num % 16 + 1]
+    return a4..a3..a2..a1
+end
+
 function string.printByte(v_str)
 	local str = ""
 	local len = string.len(v_str)
