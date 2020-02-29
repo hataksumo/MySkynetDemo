@@ -1,9 +1,12 @@
 local skynet = require "skynet"
+local mysql = require "skynet.db.mysql"
 
 local SqlStatement = class()
 
 function SqlStatement:Ctor(v_name,v_bSingleRow)
-	v_bSingleRow = v_bSingleRow or true
+	if v_bSingleRow == nil then
+		v_bSingleRow = true
+	end
 	self.bSingleRow = v_bSingleRow
 	self.sSql = nil
 	self.sName = v_name
@@ -80,10 +83,14 @@ function SqlStatement:InitWithUpdate(v_sTable,v_arrSetParam,v_arrWhere)
 end
 
 function SqlStatement:InitWithSelect(v_sTable,v_arrSetParam,v_arrWhere,v_bCnt)
-	v_bCnt = v_bCnt or false
+	if v_bCnt == nil then
+		v_bCnt = false
+	end
 	local sb = StringBuilder:new()
 	sb:Append("SELECT ")
-	sb:Append("COUNT(*) as `cnt`, ")
+	if v_bCnt then
+		sb:Append("COUNT(*) as `cnt`, ")
+	end
 	local setParamLen = #v_arrSetParam
 	for _i,val in ipairs(v_arrSetParam) do
 		sb:Append(val)
@@ -134,23 +141,35 @@ function SqlStatement:GetPrepareSql()
 end
 
 
-function SqlStatement:GetExecutePrepareSql(v_arrParams)
-	assert(#self.tParams == #v_arrParams,"the number of param must be "..#self.tParams.." but your params are "..print_table(v_arrParams))
+function SqlStatement:GetExecutePrepareSql(...)
+	local params = {...}
+	local paramArr = {}
+	for _i,subParamArr in ipairs(params) do
+		for _j,param in ipairs(subParamArr) do
+			table.insert(paramArr,param)
+		end
+	end
+
+	if #self.tParams ~= #paramArr then
+		print(self.sName.." the number of param must be "..#self.tParams.." but your params are "..print_table(paramArr))
+		return nil
+	end
+	--assert(#self.tParams == #paramArr,self.sName.." the number of param must be "..#self.tParams.." but your params are "..print_table(paramArr))
 	self.iExecuteCnt = 0
-	local len = #v_arrParams
+	local len = #paramArr
 	local sb = StringBuilder:new()
 	for _i,paramName in ipairs(self.tParams) do
-		local val = v_arrParams[_i]
+		local val = paramArr[_i]
 		if type(val) == "number" then
 			sb:Append(string.format("SET @%s = %s;\n",paramName,val))
 		elseif type(val) == "string" then
 			if self.arrCmdKey[paramName] then
 				sb:Append(string.format("SET @%s = %s;\n",paramName,val))
 			else
-				sb:Append(string.format("SET @%s = '%s';\n",paramName,val))
+				sb:Append(string.format("SET @%s = %s;\n",paramName,mysql.quote_sql_str(val)))
 			end			
 		else
-			print("SqlStatement:ExecutePrepare, type illegal "..val)
+			error("SqlStatement:ExecutePrepare, type illegal "..(val or "nil"))
 		end
 		self.iExecuteCnt = self.iExecuteCnt + 1
 	end
