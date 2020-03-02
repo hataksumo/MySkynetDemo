@@ -9,6 +9,8 @@ CtrlMgr = {};
 local this = CtrlMgr;
 local ctrlList = {};	--控制器列表--
 
+--local ctrlCfg = dofile"Config/ctrl_cfg"
+
 function CtrlMgr.Init()
 	return this
 end
@@ -17,6 +19,7 @@ function CtrlMgr.GetOrCreateCtrl(v_strLogicName)
 	if ctrlList[v_strLogicName] then
 		return ctrlList[v_strLogicName]
 	end
+
 	local cfg = ctrlCfg[v_strLogicName]
 	if not cfg then
 		logError(string.format("ctrlCfg[%s] = nil",v_strLogicName))
@@ -33,9 +36,16 @@ function CtrlMgr.GetOrCreateCtrl(v_strLogicName)
 		return
 	end
 
+	if ctrlClass == nil then
+		logError("perhas your ctrl "..v_strLogicName.." class forget to return the ctrl")
+		return nil
+	end
+
 	if type(ctrlClass) == "boolean" then
 		logError("class is wrong ")
+		return nil
 	end
+
 	local ctrlObj = ctrlClass:new(cfg)
 	ctrlList[v_strLogicName] = ctrlObj
 	return ctrlList[v_strLogicName]
@@ -61,17 +71,6 @@ function CtrlMgr.SendMsg(v_sLogicName,v_sCmd,v_oSender,...)
 		logError(string.format("can't find the view keyed %s",v_sLogicName))
 		return
 	end
-	local params = {...}
-	local ok,errMsg = pcall(function()
-		the_ctrl:CMDCallBack(v_sCmd,v_oSender,table.unpack(params))
-	end)
-	if not ok then
-		local name = ""
-		if IsObject(v_oSender) then
-			name = v_oSender:ToString()
-		end
-		print("An error occured while "..name.. " calling CtrlMgr.SendMsg "..v_sLogicName.." : "..v_sCmd..", errMsg is \n"..errMsg.."\n"..debug.traceback())
-		return
-	end
+	the_ctrl:CMDCallBack(v_sCmd,v_oSender,...)
 end
 

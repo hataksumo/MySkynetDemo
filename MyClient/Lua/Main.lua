@@ -1,5 +1,4 @@
 require "lua_class"
-require "Common/functions"
 
 
 function getTars(v_tar)

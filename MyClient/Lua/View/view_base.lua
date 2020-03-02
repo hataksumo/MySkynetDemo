@@ -8,6 +8,8 @@ function ViewBase:Ctor(v_cfg)
 	self.CMDS["Close"] = ViewBase.Close
 	self.CMDS["Awake"] = ViewBase.OnCmdAwake
 	self.CMDS["Start"] = ViewBase.OnCmdStart
+	self.arrPendingCmds = {}
+	self.pending = false
 	--self.CMDS["Click"] = ViewBase.OnCmdClick
 	--self.CMDS["ClickEvent"] = ViewBase.OnCmdClickEvent
 end
@@ -40,6 +42,28 @@ function ViewBase:InitWithWidget()
 		end
 	end
 end
+
+function ViewBase:BeginPending()
+	self.pending = true
+end
+
+function ViewBase:PendingFinish()
+	self.pending = false
+	for _i,cmdObj in ipairs(self.arrPendingCmds) do
+		local cmd = self.CMDS[cmdObj.cmd]
+		if cmd then
+			--print("PendingFinish cmd ".._i)
+			cmd(self,cmdObj.sender,table.unpack(cmdObj.args))
+		else
+			logError(string.format("no cmd %s in view class %sCtrl",cmdObj.cmd or "nil",self.sLogicName))
+		end
+	end
+	self.arrPendingCmds = {}
+end
+
+
+
+
 
 function ViewBase:InitShow()
 
@@ -82,9 +106,19 @@ function ViewBase:OnCmdEvent(v_oSender,v_object)
 end
 
 function ViewBase:CMDCallBack(v_cmd,v_oSender,...)
+	if self.pending then
+		--print("insert cmd "..v_cmd)
+		local pendCmd = {}
+		pendCmd.cmd = v_cmd
+		pendCmd.sender = v_oSender
+		pendCmd.args = {...}
+		table.insert(self.arrPendingCmds,pendCmd)
+		return
+	end
+	--print("excute cmd "..v_cmd)
 	local the_cmd = self.CMDS[v_cmd]
 	if not the_cmd then
-		logError(string.format("no cmd %s in view class %sPanel",v_cmd or "nil",self.sLogicName))
+		logError(string.format("no cmd %s in view class %sCtrl",v_cmd or "nil",self.sLogicName))
 		return
 	end
 	the_cmd(self,v_oSender,...)
@@ -132,9 +166,11 @@ function ViewBase:GetImage(v_sPath)
 end
 
 function ViewBase:SendViewMsg(v_sViewLogicName,v_sCmd,...)
+	assert(type(v_sViewLogicName)=="string" and type(v_sCmd)=="string","ViewBase:SendViewMsg param type wrong "..debug.traceback())
 	ViewMgr.SendMsg(v_sViewLogicName,v_sCmd,self,...)
 end
 function ViewBase:SendCtrlMsg(v_sCtrlLogicName,v_sCmd,...)
+	assert(type(v_sCtrlLogicName)=="string" and type(v_sCmd)=="string","ViewBase:SendCtrlMsg param type wrong "..debug.traceback())
 	CtrlMgr.SendMsg(v_sCtrlLogicName,v_sCmd,self,...)
 end
 

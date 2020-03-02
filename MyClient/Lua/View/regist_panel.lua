@@ -1,7 +1,10 @@
 local RegistView = class(ViewBase)
 
 function RegistView:Ctor()
-	
+	self.CMDS["Warning"] = self.OnCmdWarning
+	self.CMDS["HideWarning"] = self.OnCmdHideWarning
+	self.CMDS["Reset"] = self.OnCmdReset
+	self.CMDS["ResetPasswd"] = self.OnCmdResetPasswd
 end
 
 function RegistView:_OnInit()
@@ -12,10 +15,6 @@ function RegistView:_OnInit()
 		self:OnBtnBack()
 	end
 	)
-	self.CMDS["Warning"] = self.OnCmdWarning
-	self.CMDS["HideWarning"] = self.OnCmdHideWarning
-	self.CMDS["Reset"] = self.OnCmdReset
-	self.CMDS["ResetPasswd"] = self.OnCmdResetPasswd
 end
 
 function RegistView:InitShow()

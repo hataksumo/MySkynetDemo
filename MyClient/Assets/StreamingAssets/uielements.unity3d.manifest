@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3891556776
+CRC: 2752027016
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e6be8173e26988184cf4649ad1be3013
+    Hash: 5746fa9004367d97eb202f474b48fbf5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9e6ad29cbd2df8fbe1a15315db0e51ab
@@ -14,6 +14,7 @@ ClassTypes:
 - Class: 213
   Script: {instanceID: 0}
 Assets:
+- "Assets/Art/UI/SharedImage/UIElements/\u8FDB\u5EA6\u6761-\u7AF9.png"
 - Assets/Art/UI/SharedImage/UIElements/Spring.png
 - Assets/Art/UI/SharedImage/UIElements/goat.png
 - Assets/Art/UI/SharedImage/UIElements/Winter.png

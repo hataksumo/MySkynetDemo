@@ -35,3 +35,5 @@ WWW = UnityEngine.WWW;
 GameObject = UnityEngine.GameObject;
 
 table.unpack = unpack
+
+EventTriggerType = UnityEngine.EventSystems.EventTriggerType

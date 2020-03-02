@@ -1,6 +1,3 @@
-local sharetable = require "skynet.sharetable"
-
-
 local MsgHandler = {}
 
 local function unpackMsg(v_iIdx,v_iType,v_iMsgId,v_sMsgData)
@@ -17,6 +14,9 @@ local function unpackMsg(v_iIdx,v_iType,v_iMsgId,v_sMsgData)
 			return nil
 		end
 		tMsg = ProtoSchema:decode(the_msg_cfg.ProtoName,v_sMsgData)
+	else
+		print(string.format("cfg_msg[%s][%d] = nil",idkey,v_iMsgId))
+		return
 	end
 	--print("unpackMsg : ".. print_table(tMsg) )
 	if not the_msg_cfg.SrvReqHandler then

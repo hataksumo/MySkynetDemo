@@ -1,23 +1,10 @@
---require "3rd/pblua/login_pb"
---require "3rd/pbc/protobuf"
-
---local lpeg = require "lpeg"
-
---local json = require "cjson"
---local util = require "3rd/cjson/util"
-
---local sproto = require "3rd/sproto/sproto"
---local core = require "sproto.core"
---local print_r = require "3rd/sproto/print_r"
 ddt = {}
+dofile "Common/words_mgr"
 dofile "Controller/ctrl_mgr"
 dofile "View/view_mgr"
-dofile "Common/functions"
+local functions_init = dofile "Common/functions"
 dofile "Common/string_funs"
-dofile "Common/words_mgr"
 dofile "Module/Player"
-
-
 
 abAssetCfg = dofile "Config/asset_cfg"
 ctrlCfg = dofile "Config/ctrl_cfg"
@@ -35,15 +22,17 @@ local tListeners = {}
 
 
 
-
-
 --初始化完成，发送链接服务器信息--
 function Game.OnInitOK()
+	functions_init()
     --注册LuaView--
     CtrlMgr.Init();
     --print("test msg")
     Network.InitMsg()
     --print("init ok")
+    local gameCtrl = CtrlMgr.GetOrCreateCtrl("Game")
+    gameCtrl:Start()
+
     local loginCtrl = CtrlMgr.GetOrCreateCtrl("Login")
     loginCtrl:Start()
     -- ViewMgr.CreatePanel("Login")
@@ -67,25 +56,48 @@ function Game.OnDestroy()
 end
 
 function Game.OnUpdate(v_dt)
-	for _key,oListener in pairs(tListeners) do
+	for _key,oListenObject in pairs(tListeners) do
 		--print("Update ext key ".._key)
-		if IsObject(oListener) then
-			oListener:OnUpdate(v_dt)
+		if type(oListenObject) == "function" then
+			oListenObject(v_dt)
 		else
-			oListener(v_dt)
+			oListenObject.callBack(oListenObject.listener,v_dt)
 		end
 	end
 end
 
-function Game.AddUpdateListerner(v_key,v_oListerner)
+function Game.AddUpdateListerner(v_key,v_oListerner,v_fnCallback)
 	if tListeners[v_key] then
-		print(debug.traceback())
-		print("Game.AddListerner "..v_key.."has been registed")
+		logError("Game.AddListerner "..v_key.."has been registed")
 		return
 	end
-	tListeners[v_key] = v_oListerner
+	if type(v_oListerner) == "function" then
+		tListeners[v_key] = v_oListerner
+	elseif IsObject(v_oListerner) then
+		if not v_fnCallback then
+			logError("Game.AddUpdateListerner callBack is nil")
+			return
+		end
+		tListeners[v_key] = {listener = v_oListerner,callBack = v_fnCallback}
+	else
+		logError("Game.AddUpdateListerner binding param is illicit")
+	end
+	
 end
 
-function Game.RemoveUpdateListener(v_key,v_oListerner)
+function Game.RemoveUpdateListener(v_key)
 	tListeners[v_key] = nil
+end
+
+function Game.Debug(v_str)
+	print(v_str.."\n"..debug.traceback())
+end
+
+local servetTimeDif = 0
+function Game.GetServetTime()
+	return os.time() + servetTimeDif
+end
+
+function Game.UpdateServTime(v_iSrvTime)
+	servetTimeDif = v_iSrvTime - os.time()
 end

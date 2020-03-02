@@ -141,25 +141,18 @@ function SqlStatement:GetPrepareSql()
 end
 
 
-function SqlStatement:GetExecutePrepareSql(...)
-	local params = {...}
-	local paramArr = {}
-	for _i,subParamArr in ipairs(params) do
-		for _j,param in ipairs(subParamArr) do
-			table.insert(paramArr,param)
-		end
-	end
+function SqlStatement:GetExecutePrepareSql(v_params)
 
-	if #self.tParams ~= #paramArr then
-		print(self.sName.." the number of param must be "..#self.tParams.." but your params are "..print_table(paramArr))
+	if #self.tParams ~= #v_params then
+		print(self.sName.." the number of param must be "..#self.tParams.." but your params are "..print_table(v_params))
 		return nil
 	end
-	--assert(#self.tParams == #paramArr,self.sName.." the number of param must be "..#self.tParams.." but your params are "..print_table(paramArr))
+	--assert(#self.tParams == #v_params,self.sName.." the number of param must be "..#self.tParams.." but your params are "..print_table(v_params))
 	self.iExecuteCnt = 0
-	local len = #paramArr
+	local len = #v_params
 	local sb = StringBuilder:new()
 	for _i,paramName in ipairs(self.tParams) do
-		local val = paramArr[_i]
+		local val = v_params[_i]
 		if type(val) == "number" then
 			sb:Append(string.format("SET @%s = %s;\n",paramName,val))
 		elseif type(val) == "string" then

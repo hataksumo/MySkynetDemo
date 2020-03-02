@@ -4,13 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace LuaFramework {
     public class LuaBehaviour : View {
-        private string data = null;
+        //private string data = null;
         public string sLogicName = null;
         public string sBundleName = null;
-        private Dictionary<string, LuaFunction> buttons = new Dictionary<string, LuaFunction>();
+        private Dictionary<string, LuaFunction> _buttonsFunMemo = new Dictionary<string, LuaFunction>();
+        private Dictionary<string, LuaFunction> _eventTrigerFunMemo = new Dictionary<string, LuaFunction>();
 
         protected void Awake()
         {
@@ -43,13 +45,32 @@ namespace LuaFramework {
                 return;
             }
                 
-            buttons.Add(go.name, luafunc);
+            _buttonsFunMemo.Add(go.name, luafunc);
             go.GetComponent<Button>().onClick.AddListener(
                 delegate() {
                     luafunc.Call(go);
                 }
             );
         }
+
+        public void AddEvent(GameObject go,EventTriggerType v_eType ,LuaFunction luafunc)
+        {
+            EventTrigger et = go.GetComponent<EventTrigger>();
+            if (et == null)
+            {
+                et = go.AddComponent<EventTrigger>();
+            }
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = v_eType;
+            _eventTrigerFunMemo.Add(go.name + "_evt" + v_eType, luafunc);
+            UnityEngine.Events.UnityAction<UnityEngine.EventSystems.BaseEventData> ua = delegate (BaseEventData e) {
+                luafunc.Call(e);
+            };
+            entry.callback.AddListener(ua);
+            et.triggers.Add(entry);
+        }
+
+
 
         /// <summary>
         /// 删除单击事件
@@ -58,10 +79,10 @@ namespace LuaFramework {
         public void RemoveClick(GameObject go) {
             if (go == null) return;
             LuaFunction luafunc = null;
-            if (buttons.TryGetValue(go.name, out luafunc)) {
+            if (_buttonsFunMemo.TryGetValue(go.name, out luafunc)) {
                 luafunc.Dispose();
                 luafunc = null;
-                buttons.Remove(go.name);
+                _buttonsFunMemo.Remove(go.name);
             }
         }
 
@@ -69,12 +90,19 @@ namespace LuaFramework {
         /// 清除单击事件
         /// </summary>
         public void ClearClick() {
-            foreach (var de in buttons) {
+            foreach (var de in _buttonsFunMemo) {
                 if (de.Value != null) {
                     de.Value.Dispose();
                 }
             }
-            buttons.Clear();
+            _buttonsFunMemo.Clear();
+            foreach (var de in _eventTrigerFunMemo)
+            {
+                if (de.Value != null) {
+                    de.Value.Dispose();
+                }
+            }
+            _eventTrigerFunMemo.Clear();
         }
 
         //-----------------------------------------------------------------

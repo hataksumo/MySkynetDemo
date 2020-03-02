@@ -145,18 +145,27 @@ function CtrlBase:AddSocketListener(v_iMsgId,v_fnHandler,v_bEndPending)
 	Event.AddListener(v_iMsgId,fnCallBack,self)
 end
 
-function CtrlBase:RegistUpdate(v_key)
-	Game.AddUpdateListerner(v_key,self)
+function CtrlBase:RegistUpdate(v_key,v_fnCallBack)
+	if v_fnCallBack == nil then
+		v_fnCallBack = self.OnUpdate
+		if not v_fnCallBack then
+			logError("CtrlBase:RegistUpdate bind "..v_key.." v_fnCallBack is nil and OnUpdate has not been Implemented")
+			return
+		end
+	end
+	Game.AddUpdateListerner(v_key,self,v_fnCallBack)
 end
 
 function CtrlBase:RemoveUpdate(v_key)
-	Game.RemoveUpdateListener(v_key,self)
+	Game.RemoveUpdateListener(v_key)
 end
 
 function CtrlBase:SendViewMsg(v_sViewLogicName,v_sCmd,...)
+	assert(type(v_sViewLogicName)=="string" and type(v_sCmd)=="string","CtrlBase:SendViewMsg param type wrong "..debug.traceback())
 	ViewMgr.SendMsg(v_sViewLogicName,v_sCmd,self,...)
 end
 function CtrlBase:SendCtrlMsg(v_sCtrlLogicName,v_sCmd,...)
+	assert(type(v_sCtrlLogicName)=="string" and type(v_sCmd)=="string","CtrlBase:SendCtrlMsg param type wrong "..debug.traceback())
 	CtrlMgr.SendMsg(v_sCtrlLogicName,v_sCmd,self,...)
 end
 

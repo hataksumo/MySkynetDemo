@@ -106,8 +106,9 @@ function REQUEST.Regist(v_tMsg)
 	end
 end
 
-function REQUEST.BackToLogin(v_tMsg)
+function PLAYER_REQUEST.BackToLogin(v_tMsg)
 	if v_tMsg.account_id == v_tMsg.account_id then
+		LogOut()
 		g_account = nil
 		g_player = nil
 		sendMsg(40001,{code = 1})

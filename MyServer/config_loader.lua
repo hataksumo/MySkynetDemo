@@ -1,7 +1,5 @@
 local sproto = require "sprotoparser"
 local skynet = require "skynet"
-local cfg_msg = require "Config/msg_cfg"
-local cfg_item = require "Config/item"
 local sharetable = require "skynet.sharetable"
 
 
@@ -24,7 +22,15 @@ skynet.start(function()
 	local pb = {}
 	pb.sbin = binPb
 	sharetable.loadtable("pb",pb)
+
+	local cfg_msg = require "Config/msg_cfg"	
+	local cfg_item = require "Config/item"
+	local cfg_global = require "Config/global"
+	local cfg_clickResInfo = require "Config/clickResInfo"
 	sharetable.loadtable("cfg_msg",cfg_msg)
 	sharetable.loadtable("cfg_item",cfg_item)
+	sharetable.loadtable("cfg_global",cfg_global)
+	sharetable.loadtable("cfg_clickResInfo",cfg_clickResInfo)
+
 end
 )

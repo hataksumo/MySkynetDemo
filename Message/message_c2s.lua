@@ -33,6 +33,11 @@ local message = [[
 {#10001
 	account_id 0 : string
 }
+.ReqGatherRes
+{#10040
+	slot 0 : integer
+	clickTimes 1 : integer
+}
 
 ]]
 

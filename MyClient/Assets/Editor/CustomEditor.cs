@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using LuaInterface;
 using LuaFramework;
+using UnityEngine.UI;
 
 public static class CustomEditor
 {
@@ -147,5 +148,11 @@ public static class CustomEditor
         //ScreenCapture.CaptureScreenshot(filename, 0);
 
         return screenShot;
-    } 
+    }
+
+    static void test()
+    {
+        Image img;
+        //img.fillAmount
+    }
 }

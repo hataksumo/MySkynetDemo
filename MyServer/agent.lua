@@ -14,10 +14,11 @@ local CFG_LOADER = nil
 local host
 local CMD = {}
 REQUEST = {}
-require "Logic/Login/login"
 ACCOUNT_REQUEST = {}
-require "Logic/Login/get_player"
 PLAYER_REQUEST = {}
+require "Logic/Login/login"
+require "Logic/Login/get_player"
+require "Logic/HomePage/ResClick"
 
 ProtoSchema = nil
 local MsgHandler = require "MsgHandler"
@@ -37,11 +38,6 @@ function sendMsg(v_iMsgId,v_tMsg)
 end
 
 
-local HeartBeatIdx = 1
-local function send_heartbeat(pack)
-	local package = string.pack("<HHHs2", #pack+6,NetProtoS2CType.HeartBeat,HeartBeatIdx,pack)
-	socket.write(client_fd, package)
-end
 
 
 
@@ -78,49 +74,49 @@ skynet.register_protocol {
 
 		if g_player then
 			local fnHandler = PLAYER_REQUEST[msg.handler]
-			if fnHandler then
-				local ok,errMsg = pcall(function()
-					return fnHandler(msg.tMsg)
-				end)
-				if not ok then
-					print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
-				end
+			if not fnHandler then
+				print(string.format("PLAYER_REQUEST[%s] = nil",msg.handler))
 				return
 			else
-				print("don't has PLAYER_REQUEST "..msg.handler)
+				fnHandler(msg.tMsg)
+				if g_player then
+					g_player:SynchronizeItemInfo()
+				end
+				return
 			end
+			
 		end
 
 		if g_account then
 			local fnHandler = ACCOUNT_REQUEST[msg.handler]
-			if fnHandler then
-				local ok,errMsg = pcall(function()
-					return fnHandler(msg.tMsg)
-				end)
-				if not ok then
-					print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
-				end
+			if not fnHandler then
+				print(string.format("ACCOUNT_REQUEST[%s] = nil",msg.handler))
 				return
 			else
-				print("don't has PLAYER_REQUEST "..msg.handler)
+				fnHandler(msg.tMsg)
+				return
 			end
+			
 		end
 
 		local fnHandler = REQUEST[msg.handler]
-		if fnHandler then
-			local ok,errMsg = pcall(function()
-				return fnHandler(msg.tMsg)
-			end)
-			if not ok then
-				print("an error occured while calling handler "..msg.handler..". err msg is \n"..errMsg)
-			end
+		if not fnHandler then
+			print(string.format("REQUEST[%s] = nil",msg.handler))
+			return
 		else
-			print("don't has REQUEST "..msg.handler)
+			fnHandler(msg.tMsg)
+			return
 		end
-		return
+		
 		--skynet.trace()
 	end
 }
+
+function LogOut()
+	if g_player then
+		g_player:Save()
+	end
+end
 
 function CMD.start(conf)
 	local fd = conf.client
@@ -133,11 +129,19 @@ function CMD.start(conf)
 	ProtoSchema = sproto.new(pbBin.sbin)
 
 	skynet.fork(function()
+		local heartBeatIdx = 1
 		while true do
-			send_heartbeat("heartbeat")
+			sendMsg(40002,{srvTime = os.time(),beatTimes = heartBeatIdx})
+			heartBeatIdx = heartBeatIdx + 1
 			skynet.sleep(500)
 		end
 	end)
+
+	-- sharetable.query("cfg_msg")
+	-- sharetable.query("cfg_item")
+	-- sharetable.query("cfg_global")
+	-- sharetable.query("cfg_clickResInfo")
+
 
 	client_fd = fd
 	skynet.call(gate, "lua", "forward", fd)
@@ -145,6 +149,7 @@ end
 
 function CMD.disconnect()
 	-- todo: do something before exit
+	LogOut()
 	print("===========agent disconnect==========")
 	skynet.exit()
 end

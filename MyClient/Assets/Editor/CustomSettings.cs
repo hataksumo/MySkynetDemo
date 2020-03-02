@@ -9,6 +9,7 @@ using BindType = ToLuaMenu.BindType;
 using UnityEngine.UI;
 using System.Reflection;
 using UnityEngine.Networking;
+using UnityEngine.EventSystems;
 
 public static class CustomSettings
 {
@@ -61,7 +62,10 @@ public static class CustomSettings
         //_GT(typeof(TestExport)),
         //_GT(typeof(TestExport.Space)),
         //-------------------------------------------------------------------        
-                        
+        
+        _GT(typeof(PointerEventData)),
+        _GT(typeof(EventTriggerType)),
+
         _GT(typeof(LuaInjectionStation)),
         _GT(typeof(InjectType)),
         _GT(typeof(Debugger)).SetNameSpace(null),          
@@ -183,7 +187,7 @@ public static class CustomSettings
         _GT(typeof(ExcelSheetObject)),
         _GT(typeof(MutiExcelSheetObject)),
         _GT(typeof(MyTools)),
-        _GT(typeof(ZFDebug))
+        _GT(typeof(ZFDebug)),
     };
 
     public static List<Type> dynamicList = new List<Type>()

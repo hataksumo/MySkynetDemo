@@ -17,11 +17,11 @@ function CMD.start()
         if not ok then
             print("An error occured when prepare "..key..". errmsg is: \n"..err)
         else
-            print(prepare)
+            --print(prepare)
             if rtn.badresult then
                 print(rtn.err)
             else
-               print("prepare "..key.." ok \n") 
+               --print("prepare "..key.." ok \n") 
             end  
         end
         
@@ -57,28 +57,37 @@ local function _safeQuery(v_sql)
     return true,res
 end
 
+local function batchParam(...)
+    local rtn = {}
+    local params = {...}
+    for _i,arrParam in ipairs(params) do
+        Array.Merge(rtn,arrParam)
+    end
+    return rtn
+end
 
 
-
-function CMD.Query(v_sSqlStatementKey,v_params)
+function CMD.Query(v_sSqlStatementKey,...)
     local statement = g_prepareSqls[v_sSqlStatementKey]
     if statement == nil then
         print("can't find statement keyed "..v_sSqlStatementKey)
         return
     end
+    local params = batchParam(...)
     skynet.fork(function() 
-        local ok,res = _safeQuery(statement:GetExecutePrepareSql(v_params))
+        local ok,res = _safeQuery(statement:GetExecutePrepareSql(params))
         --print(print_table(res))
     end)
 end
 
-function CMD.Querycb(v_sSqlStatementKey,v_params)
+function CMD.Querycb(v_sSqlStatementKey,...)
     local statement = g_prepareSqls[v_sSqlStatementKey]
     if statement == nil then
         print("can't find statement keyed "..v_sSqlStatementKey)
         return
-    end 
-    local ok,res = _safeQuery(statement:GetExecutePrepareSql(v_params))
+    end
+    local params = batchParam(...)
+    local ok,res = _safeQuery(statement:GetExecutePrepareSql(params))
     if ok then
         local rtn = statement:GetResult(res)
         return true,rtn

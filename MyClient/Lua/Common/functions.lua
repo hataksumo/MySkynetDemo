@@ -73,3 +73,18 @@ function table.getCnt(v_t)
 	end
 	return cnt
 end
+
+local cfg_global
+function GetGlobalVar(v_key)
+	if not cfg_global[v_key] then
+		logError("don't have "..(v_key or "nil").." in global")
+		return nil
+	end
+	return cfg_global[v_key]
+end
+
+local init = function()
+	cfg_global = dofile("Config/global")
+end
+
+return init

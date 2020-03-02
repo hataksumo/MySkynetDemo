@@ -123,6 +123,7 @@ function Network.InitMsg()
     local schema = schemaC2S .. schemaS2C .. schemaDB
     ProtoSchema = sproto.parse(schema)
     assert(ProtoSchema)
+    print("CtrlMgr.GetOrCreateCtrl")
     local onNetworkCtrl = CtrlMgr.GetOrCreateCtrl("OnNetwork")
     onNetworkCtrl:Prepare()
     --连接服务器

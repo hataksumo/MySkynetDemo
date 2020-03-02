@@ -22,18 +22,22 @@ local data = {
 		[10030] = {ProtoName = "ReqPullPlayerList"},--拉取角色列表
 		[10031] = {ProtoName = "ReqPullPlayerInfo"},--拉取角色信息
 		[10032] = {ProtoName = "ReqNewPlayer"},--新建角色
-		[10033] = {ProtoName = "ReqChangeNickName"}--更改角色昵称
+		[10033] = {ProtoName = "ReqChangeNickName"},--更改角色昵称
+		[10040] = {ProtoName = "ReqGatherRes"}--采集
 	},
 	S2C = {
 		[40000] = {ProtoName = "RspERR"},--错误
 		[40001] = {ProtoName = "RspBackToLogin"},--返回登陆回复
+		[40002] = {ProtoName = "Heartbeat"},--心跳
 		[40010] = {ProtoName = "RspUsrNameValid"},--验证账号回复
 		[40011] = {ProtoName = "RspLogin"},--登陆请求回复
 		[40020] = {ProtoName = "RspRegist"},--注册请求回复
 		[40030] = {ProtoName = "RspPullPlayerList"},--拉取角色列表回复
 		[40031] = {ProtoName = "RspPullPlayerInfo"},--拉取角色信息回复
 		[40032] = {ProtoName = "RspNewPlayer"},--新建角色回复
-		[40033] = {ProtoName = "RspChangeNickName"}--设置昵称回复
+		[40033] = {ProtoName = "RspChangeNickName"},--设置昵称回复
+		[40040] = {ProtoName = "RspGather"},--采集反馈
+		[41000] = {ProtoName = "RspResChange"}--资源变化
 	}
 }
 ddt["msg_cfg"] = data

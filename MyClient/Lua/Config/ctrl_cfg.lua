@@ -12,6 +12,7 @@ if ddt["ctrl_cfg"] ~= nil then
 	return ddt["ctrl_cfg"]
 end
 local data = {
+	Game = {Key = "Game",Ctrl = "game_ctrl"},
 	Login = {Key = "Login",Ctrl = "login_ctrl"},
 	HomePage = {Key = "HomePage",Ctrl = "homepage_ctrl"},
 	OnNetwork = {Key = "OnNetwork",Ctrl = "on_network_ctrl"},

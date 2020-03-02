@@ -30,7 +30,7 @@ function _print_table(v_t)
 			luaKey = '['..key..']'
 		end
 		if type(val) == "table" then
-			str = str..luaKey.." = {\r\n".._print_table(val).."\r\n},"
+			str = str..luaKey.." = {\r\n".._print_table(val).."\r\n}"
 		else
 			str = str..luaKey.." = "..val
 		end
@@ -42,14 +42,36 @@ function string.IsNullOrEmpty(v_str)
 	return v_str == nil or v_str == ""
 end
 
+local hexHash = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
+
+function getHex2(v_num)
+	local a1 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a2 = hexHash[v_num % 16 + 1]
+    return a2..a1
+end
+
+function getHex4(v_num)
+    local a1 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a2 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a3 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a4 = hexHash[v_num % 16 + 1]
+    return a4..a3..a2..a1
+end
+
 function string.printByte(v_str)
 	local str = ""
 	local len = string.len(v_str)
 	for i=1,len do
-		if i > 1 then
+		str = str .. getHex2(string.byte(v_str,i))
+		if math.fmod(i,16) == 0 then
+			str = str.."\n"
+		elseif i<len then
 			str = str.." "
 		end
-		str = str .. string.byte(v_str,i)
 	end
 	return str
 end

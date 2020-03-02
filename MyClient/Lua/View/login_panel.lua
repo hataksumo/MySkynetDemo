@@ -1,6 +1,18 @@
 local LoginView = class(ViewBase)
 function LoginView:Ctor()
 	self.mod = 1--1表示输入账号，2表示输入密码，3表示注册
+	self.CMDS["ChangeMod"] = function(v_self,v_oSender,v_mod)
+		self:ChangeMod(v_mod)
+	end
+	self.CMDS["Warning"] = function(v_self,v_oSender,v_iWarningId)
+		self:Warning(v_iWarningId)
+	end
+	self.CMDS["HideWarning"] = function(v_self,v_oSender)
+		self:HideWarning()
+	end
+	self.CMDS["Clear"] = function(v_self,v_oSender)
+		self:Clear()
+	end
 end
 
 function LoginView:_OnInit()
@@ -14,19 +26,6 @@ function LoginView:_OnInit()
 	self.comBehaviour:AddClick(self.goBtnBack,function()
 		self:OnBtnBack()
 	end)
-
-	self.CMDS["ChangeMod"] = function(v_self,v_oSender,v_mod)
-		self:ChangeMod(v_mod)
-	end
-	self.CMDS["Warning"] = function(v_self,v_oSender,v_iWarningId)
-		self:Warning(v_iWarningId)
-	end
-	self.CMDS["HideWarning"] = function(v_self,v_oSender)
-		self:HideWarning()
-	end
-	self.CMDS["Clear"] = function(v_self,v_oSender)
-		self:Clear()
-	end
 	self.goTxtWarning:SetActive(false)
 	self:ChangeMod(1)
 end

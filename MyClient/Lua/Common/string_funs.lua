@@ -30,7 +30,7 @@ function _print_table(v_t)
 			luaKey = '['..key..']'
 		end
 		if type(val) == "table" then
-			str = str..luaKey.." = {\r\n".._print_table(val).."\r\n},"
+			str = str..luaKey.." = {\r\n".._print_table(val).."\r\n}"
 		else
 			str = str..luaKey.." = "..val
 		end
@@ -44,7 +44,14 @@ end
 
 local hexHash = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}
 
-function getHex(v_num)
+function getHex2(v_num)
+	local a1 = hexHash[v_num % 16 + 1]
+    v_num = math.floor(v_num / 16)
+    local a2 = hexHash[v_num % 16 + 1]
+    return a2..a1
+end
+
+function getHex4(v_num)
     local a1 = hexHash[v_num % 16 + 1]
     v_num = math.floor(v_num / 16)
     local a2 = hexHash[v_num % 16 + 1]
@@ -62,7 +69,7 @@ function string.printByte(v_str)
 		if i > 1 then
 			str = str.." "
 		end
-		str = str .. string.byte(v_str,i)
+		str = str .. getHex2(string.byte(v_str,i))
 	end
 	return str
 end

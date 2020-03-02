@@ -87,7 +87,22 @@ local data = {
 			goBtnSetting = {Type = "GameObject",Path = "BtnSetting"},
 			goSettingPanel = {Type = "GameObject",Path = "SettingPanel"},
 			goBtnGoBackLogin = {Type = "GameObject",Path = "SettingPanel/BtnGoBackLogin"},
-			goBtnSettingPanelClose = {Type = "GameObject",Path = "SettingPanel/BtnClose"}
+			goBtnSettingPanelClose = {Type = "GameObject",Path = "SettingPanel/BtnClose"},
+			comTxtRes1Stock = {Type = "Text",Path = "Resource/Resource1/TxtStok"},
+			comTxtRes1Add = {Type = "Text",Path = "Resource/Resource1/TxtAdd"},
+			comTxtRes2Stock = {Type = "Text",Path = "Resource/Resource2/TxtStok"},
+			comTxtRes2Add = {Type = "Text",Path = "Resource/Resource2/TxtAdd"},
+			comTxtRes3Stock = {Type = "Text",Path = "Resource/Resource3/TxtStok"},
+			comTxtRes3Add = {Type = "Text",Path = "Resource/Resource3/TxtAdd"},
+			goBtnFood = {Type = "GameObject",Path = "ResourceInteract/BtnFood"},
+			comImgRes1Process = {Type = "Image",Path = "ResourceInteract/BtnFood/Process"},
+			goBtnWood = {Type = "GameObject",Path = "ResourceInteract/BtnWood"},
+			comImgRes2Process = {Type = "Image",Path = "ResourceInteract/BtnWood/Process"},
+			goBtnStone = {Type = "GameObject",Path = "ResourceInteract/BtnStone"},
+			comImgRes3Process = {Type = "Image",Path = "ResourceInteract/BtnStone/Process"},
+			goBtnHunter = {Type = "GameObject",Path = "ResourceInteract/BtnHunter"},
+			comImgPreyIcone = {Type = "Image",Path = "ResourceInteract/BtnHunter/Icone"},
+			comImgHunterProcess = {Type = "Image",Path = "ResourceInteract/BtnHunter/Process"}
 		}
 	},
 	SetNickName = {
